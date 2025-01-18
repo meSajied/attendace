@@ -53,7 +53,7 @@ function Employee() {
                     Employee All
                 </Link>
                 <Link
-                    to="/employee/add"
+                    to="/admin/employee/add"
                     className="block text-blue-500 hover:text-blue-700"
                 >
                     Add Employee

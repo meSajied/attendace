@@ -50,14 +50,14 @@ public class EmployeeController {
   public Optional<Employee> login(@RequestBody RequestAuth requestAuth) {
     return employeeService.getEmployeeOfUsernameAndPassword(requestAuth.getUsername(), requestAuth.getPassword());
   }
-  @GetMapping("/employee/{username}")
+  @GetMapping("/employee/username/{username}")
   public Optional<Employee> getEmployee(@PathVariable String username) {
     System.out.println(username);
     return employeeService.getEmployee(username);
   }
 
-  @GetMapping("/employee/{id}")
-  public Optional<Employee> getEmployee(@PathVariable Long id) {
+  @GetMapping("/employee/id/{id}")
+  public Optional<Employee> getEmployeeId(@PathVariable Long id) {
     return employeeService.getEmployeeId(id);
   }
 

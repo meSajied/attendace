@@ -22,7 +22,7 @@ const UpdateProfile = () => {
     useEffect(() => {
         const fetchEmployeeData = async () => {
             try {
-                const response = await axiosInstance.get(`/employee/${username}`);
+                const response = await axiosInstance.get(`/employee/username/${username}`);
                 setEmployeeData(response.data);
                 console.log(response.data);
                 setLoading(false);
@@ -32,7 +32,9 @@ const UpdateProfile = () => {
             }
         };
 
-        fetchEmployeeData();
+        if (username) {
+            fetchEmployeeData();
+        }
     }, []);
 
     const handleChange = (e) => {

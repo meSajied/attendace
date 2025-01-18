@@ -7,12 +7,10 @@ function WorkRecord() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Fetch all records on initial load
     useEffect(() => {
         fetchWorkRecords();
     }, []);
 
-    // Function to fetch work records
     function fetchWorkRecords(url = "/work-records") {
         setLoading(true);
         axiosInstance.get(url)
@@ -44,7 +42,6 @@ function WorkRecord() {
         });
     }
 
-    // Handlers for different filters
     function FetchThisWeek() {
         fetchWorkRecords("/work-records/week");
     }
@@ -82,7 +79,7 @@ function WorkRecord() {
                     Employee All
                 </Link>
                 <Link
-                    to="/employee/add"
+                    to="/admin/employee/add"
                     className="block text-blue-500 hover:text-blue-700"
                 >
                     Add Employee
