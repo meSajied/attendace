@@ -1,0 +1,185 @@
+import React, {useEffect, useState} from "react";
+import { Link } from "react-router-dom";
+import {axiosInstance} from "../axiosInstance";
+
+function WorkRecord() {
+    const [records, setRecords] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        axiosInstance
+            .get("/work-records")
+            .then((response) => {
+                const w = response.data[0].workTime;
+                let hour = Math.floor(w / 60);
+                let minute = w % 60;
+                response.data[0].workTime = `${hour} hour(s) and ${minute} minute(s)`;
+                let o = response.data[0].outTime;
+                let ohour = Math.floor(o / 60);
+                let ominute = o % 60;
+                response.data[0].outTime = `${ohour} hour(s) and ${ominute} minute(s)`;
+
+                setRecords(response.data);
+                console.log(response.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError(err);
+                setLoading(false);
+            });
+    }, []);
+
+    function FetchThisWeek() {
+        axiosInstance
+            .get("/work-records/week")
+            .then((response) => {
+                const w = response.data[0].workTime;
+                let hour = Math.floor(w / 60);
+                let minute = w % 60;
+                response.data[0].workTime = `${hour} hour(s) and ${minute} minute(s)`;
+                let o = response.data[0].outTime;
+                let ohour = Math.floor(o / 60);
+                let ominute = o % 60;
+                response.data[0].outTime = `${ohour} hour(s) and ${ominute} minute(s)`;
+                setRecords(response.data);
+                console.log(response.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError(err);
+                setLoading(false);
+            });
+    }
+
+    function FetchThisMonth() {
+        axiosInstance
+            .get("/work-records/month")
+            .then((response) => {
+                const w = response.data[0].workTime;
+                let hour = Math.floor(w / 60);
+                let minute = w % 60;
+                response.data[0].workTime = `${hour} hour(s) and ${minute} minute(s)`;
+                let o = response.data[0].outTime;
+                let ohour = Math.floor(o / 60);
+                let ominute = o % 60;
+                response.data[0].outTime = `${ohour} hour(s) and ${ominute} minute(s)`;
+                setRecords(response.data);
+                console.log(response.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError(err);
+                setLoading(false);
+            });
+    }
+
+    function FetchToday() {
+        axiosInstance
+            .get("/work-records/today")
+            .then((response) => {
+                const w = response.data[0].workTime;
+                let hour = Math.floor(w / 60);
+                let minute = w % 60;
+                response.data[0].workTime = `${hour} hour(s) and ${minute} minute(s)`;
+                let o = response.data[0].outTime;
+                let ohour = Math.floor(o / 60);
+                let ominute = o % 60;
+                response.data[0].outTime = `${ohour} hour(s) and ${ominute} minute(s)`;
+                setRecords(response.data);
+                console.log(response.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError(err);
+                setLoading(false);
+            });
+    }
+
+    if (loading) {
+        return <div className="text-center py-4">Loading...</div>;
+    }
+
+    if (error) {
+        return <div className="text-center py-4 text-red-500">Error fetching data!</div>;
+    }
+
+
+    return (
+        <div className="flex">
+            <div className="w-1/6 p-4 space-y-4">
+                <Link
+                    to="/work-record"
+                    className="block text-blue-500 hover:text-blue-700"
+                >
+                    Get All Work Records
+                </Link>
+                <Link
+                    to="/employee"
+                    className="block text-blue-500 hover:text-blue-700"
+                >
+                    Employee All
+                </Link>
+                <Link
+                    to="/employee/add"
+                    className="block text-blue-500 hover:text-blue-700"
+                >
+                    Add Employee
+                </Link>
+            </div>
+
+            <div className="w-4/6 p-3">
+                <div className="container mx-auto p-4">
+                    <h1 className="text-2xl font-semibold text-center mb-4">Work Records</h1>
+
+                    <div className="flex justify-center space-x-3 text-xl">
+                        <div>
+                            <button className="border-2 rounded border-blue-200" onClick={FetchThisWeek}>This Week
+                            </button>
+                        </div>
+                        <div>
+                            <button className="border-2 rounded border-blue-200" onClick={FetchThisMonth}>This Month
+                            </button>
+                        </div>
+                        <div>
+                            <button className="border-2 rounded border-blue-200" onClick={FetchToday}>Today
+                            </button>
+                        </div>
+                    </div>
+
+                    <table className="min-w-full table-auto border-collapse border border-gray-300">
+                        <thead>
+                        <tr className="bg-gray-200">
+                        <th className="border px-4 py-2">ID</th>
+                            <th className="border px-4 py-2">Date</th>
+                            <th className="border px-4 py-2">Office Type</th>
+                            <th className="border px-4 py-2">Out Time</th>
+                            <th className="border px-4 py-2">In Time</th>
+                            <th className="border px-4 py-2">Employee Email</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {records.map((record) => (
+                            <tr key={record.id} className="border-t">
+                                <td className="border px-4 py-2">{record.id}</td>
+                                <td className="border px-4 py-2">{record.date}</td>
+                                <td className="border px-4 py-2">{record.officeType}</td>
+                                <td className="border px-4 py-2">{record.outTime}</td>
+                                <td className="border px-4 py-2">{record.workTime}</td>
+                                <td className="border px-4 py-2">
+                                    <a href={`/check-in/${record.employee.id}`}
+                                       className="text-blue-500 hover:underline">
+                                        {record.employee.email}
+                                    </a>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default WorkRecord;
