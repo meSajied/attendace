@@ -190,7 +190,7 @@ public class EmployeeService {
     this.code = 1000 + r.nextInt(9000);
     System.out.println(this.code);
 
-    String url = UriComponentsBuilder.fromHttpUrl("https://sms.net.bd/sendsms")
+    String url = UriComponentsBuilder.fromHttpUrl("https://api.net.bd/sendsms")
         .queryParam("api_key", "bKIp7TPyAE9u0nc9bSP2hg4xGkjVOftNEK01V20j")
         .queryParam("to", phone)
         .queryParam("msg", code)
@@ -198,5 +198,9 @@ public class EmployeeService {
 
     RestTemplate restTemplate = new RestTemplate();
     restTemplate.getForEntity(url, String.class);
+  }
+
+  public Optional<Employee> getEmployeeId(Long id) {
+    return employeeRepository.findById(id);
   }
 }

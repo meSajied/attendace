@@ -31,11 +31,11 @@ function App() {
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route path="/" element={<RequiredAuthentication children={<Dashboard />} /> } />
                   <Route path="/profile" element={<RequiredAuthentication children={<UserProfile />} /> } />
-                  <Route path="/employee/add" element={<RequiredAuthenticationAdmin children={<AddEmployee />} />} />
-                  <Route path="/work-record" element={<RequiredAuthenticationAdmin children={<WorkRecord />} />} />
+                  <Route path="/admin/employee/add" element={<RequiredAuthenticationAdmin children={<AddEmployee />} />} />
+                  <Route path="/admin" element={<RequiredAuthenticationAdmin children={<WorkRecord />} />} />
                   <Route path="/employee" element={<Employee />} />
                   <Route path="/check-in/:id" element={<RequiredAuthenticationAdmin children={<CheckIn />} />} />
-                  <Route path="/update/:id" element={<UpdateProfile />} />
+                  <Route path="/update/:username" element={<UpdateProfile />} />
               </Routes>
           </BrowserRouter>
       </AuthProvider>

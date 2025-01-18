@@ -8,7 +8,6 @@ function CheckIn() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Fetch check-in data when the component mounts or id changes
     useEffect(() => {
         const fetchCheckIns = async () => {
             try {
@@ -23,7 +22,12 @@ function CheckIn() {
         };
 
         fetchCheckIns();
-    }, [id]);
+    }, []);
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString();
+    };
 
     if (loading) {
         return <div className="text-center p-4">Loading...</div>;
@@ -46,7 +50,7 @@ function CheckIn() {
                             className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
                         >
                             <p className="text-lg font-semibold">{checkIn.checks}</p>
-                            <p className="text-sm text-gray-500">Time: {checkIn.time}</p>
+                            <p className="text-sm text-gray-500">Time: {formatDate(checkIn.time)}</p>
                         </div>
                     ))
                 )}

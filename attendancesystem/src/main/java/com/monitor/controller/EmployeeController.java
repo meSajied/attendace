@@ -56,6 +56,11 @@ public class EmployeeController {
     return employeeService.getEmployee(username);
   }
 
+  @GetMapping("/employee/{id}")
+  public Optional<Employee> getEmployee(@PathVariable Long id) {
+    return employeeService.getEmployeeId(id);
+  }
+
   @GetMapping("/employee/get-all")
   public List<Employee> getAllEmployee() {
     return employeeService.getAllEmployee();

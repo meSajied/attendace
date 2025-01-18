@@ -102,7 +102,7 @@ function Employee() {
                                             Check-in
                                         </Link>
                                         <Link
-                                            to={`/update/${employee.id}`}
+                                            to={`/update/${employee.username}`}
                                             className="text-blue-500 hover:underline"
                                         >
                                             Update

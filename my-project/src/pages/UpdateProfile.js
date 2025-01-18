@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from "../account/Authentication";
 import { axiosInstance } from "../axiosInstance";
+import {useParams} from "react-router-dom";
 
 const UpdateProfile = () => {
     const [employeeData, setEmployeeData] = useState({
@@ -16,14 +17,14 @@ const UpdateProfile = () => {
         joiningDate: '',
     });
     const [loading, setLoading] = useState(true);
-    const { user } = useAuth();
-    const username = user?.username;
+    const {username} = useParams();
 
     useEffect(() => {
         const fetchEmployeeData = async () => {
             try {
                 const response = await axiosInstance.get(`/employee/${username}`);
                 setEmployeeData(response.data);
+                console.log(response.data);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching employee data", error);
@@ -31,10 +32,8 @@ const UpdateProfile = () => {
             }
         };
 
-        if (username) {
-            fetchEmployeeData();
-        }
-    }, [username]);
+        fetchEmployeeData();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
