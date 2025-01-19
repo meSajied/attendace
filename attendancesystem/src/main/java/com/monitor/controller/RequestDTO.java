@@ -11,7 +11,6 @@ public class RequestDTO {
 
   @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
   private LocalDateTime time;
-  private LocalDate date;
   private OfficeType officeType;
   private String username;
   @Enumerated(EnumType.STRING)
@@ -47,14 +46,6 @@ public class RequestDTO {
 
   public void setCheck(Checks check) {
     this.check = check;
-  }
-
-  public LocalDate getDate() {
-    return date;
-  }
-
-  public void setDate(LocalDate date) {
-    this.date = date;
   }
 
   @Override

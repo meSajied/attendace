@@ -25,7 +25,6 @@ function WorkRecord() {
             });
     }
 
-    // Function to format work time data
     function formatWorkTimeData(data) {
         return data.map((record) => {
             const workTime = record.workTime;
@@ -37,6 +36,12 @@ function WorkRecord() {
             let outHour = Math.floor(outTime / 60);
             let outMinute = outTime % 60;
             record.outTime = `${outHour} hour(s) and ${outMinute} minute(s)`;
+
+            let startdate = new Date(record.startTime);
+            record.startTime = startdate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+            let endtdate = new Date(record.endTime);
+            record.endTime = endtdate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
             return record;
         });
@@ -54,7 +59,6 @@ function WorkRecord() {
         fetchWorkRecords("/work-records/today");
     }
 
-    // Handling loading and error states
     if (loading) {
         return <div className="text-center py-4">Loading...</div>;
     }
