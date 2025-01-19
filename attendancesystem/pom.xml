@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.monitor</groupId>
 	<artifactId>attendance-system</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Attendance System</name>
 	<description>Office Attendance System</description>
 	<url/>
@@ -87,7 +87,6 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<scope>provided</scope>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>

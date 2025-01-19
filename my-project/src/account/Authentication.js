@@ -36,12 +36,17 @@ export const AuthProvider = ({children}) => {
         Cookies.remove('user');
     }
 
+    function logoutAdmin() {
+        setAdmin({});
+        Cookies.remove('admin');
+    }
+
     if (loading) {
         return <div>Loading...</div>;
     }
 
     return(
-        <AuthContext.Provider value={{user, admin, login, loginAdmin, isLoggedIn, isAdminLoggedIn, logout}}>
+        <AuthContext.Provider value={{user, admin, login, loginAdmin, isLoggedIn, isAdminLoggedIn, logout, logoutAdmin}}>
             {children}
         </AuthContext.Provider>
     )

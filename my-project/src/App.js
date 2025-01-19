@@ -17,6 +17,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import SendCode from "./pages/SendCode";
 import AdminLogin from "./pages/AdminLogin";
 import {RequiredAuthenticationAdmin} from "./pages/RequiredAuthenticationAdmin";
+import {AdminLogout} from "./pages/AdminLogout";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Routes>
                   <Route path="/login" element={<Login />} />
                   <Route path="/logout" element={<Logout />} />
+                  <Route path="/logout" element={<AdminLogout />} />
                   <Route path="/admin/register" element={<AdminRegister />} />
                   <Route path="/admin/dashboard" element={<RequiredAuthenticationAdmin children={<AdminDashboard />} />} />
                   <Route path="/admin/code" element={<SendCode />} />

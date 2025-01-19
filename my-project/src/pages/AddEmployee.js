@@ -35,29 +35,32 @@ function AddEmployee() {
     };
 
     return (
-        <div className="flex">
-            <div className="w-1/6 p-4 space-y-4">
+        <div className="flex h-screen">
+            <div className="w-1/6 p-4 space-y-4 bg-gray-200 flex flex-col text-xl items-center">
                 <Link
-                    to="/work-record"
-                    className="block text-blue-500 hover:text-blue-700"
+                    to="/admin"
+                    className="text-black hover:text-blue-700"
                 >
                     Get All Work Records
                 </Link>
                 <Link
                     to="/employee"
-                    className="block text-blue-500 hover:text-blue-700"
+                    className="text-black hover:text-blue-700"
                 >
                     Employee All
                 </Link>
                 <Link
                     to="/admin/employee/add"
-                    className="block text-blue-500 hover:text-blue-700"
+                    className="text-black hover:text-blue-700"
                 >
                     Add Employee
                 </Link>
             </div>
 
-            <div className="w-4/6 p-4">
+            <div className="w-4/6 p-4 w-full">
+                <div className="flex justify-end p-3">
+                    <Link to="/admin/logout" className="text-xl bg-red-500 rounded-md p-1 pl-2 pr-2">Logout</Link>
+                </div>
                 <div className="max-w-sm mx-auto p-4">
                     <h2 className="text-xl font-bold text-center mb-4">Add a Employee</h2>
 
@@ -100,7 +103,8 @@ function AddEmployee() {
                             </div>
 
                             <div>
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                                <label htmlFor="password"
+                                       className="block text-sm font-medium text-gray-700">Password</label>
                                 <input
                                     type="password"
                                     id="password"
