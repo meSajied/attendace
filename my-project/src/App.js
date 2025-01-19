@@ -26,7 +26,7 @@ function App() {
               <Routes>
                   <Route path="/login" element={<Login />} />
                   <Route path="/logout" element={<Logout />} />
-                  <Route path="/logout" element={<AdminLogout />} />
+                  <Route path="/admin/logout" element={<AdminLogout />} />
                   <Route path="/admin/register" element={<AdminRegister />} />
                   <Route path="/admin/dashboard" element={<RequiredAuthenticationAdmin children={<AdminDashboard />} />} />
                   <Route path="/admin/code" element={<SendCode />} />

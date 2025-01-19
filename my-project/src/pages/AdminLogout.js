@@ -4,6 +4,7 @@ import {useAuth} from "../account/Authentication";
 
 const AdminLogout = () => {
     const {logoutAdmin} = useAuth();
+
     logoutAdmin();
 
     return(

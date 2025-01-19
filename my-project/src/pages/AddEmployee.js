@@ -59,7 +59,7 @@ function AddEmployee() {
 
             <div className="w-4/6 p-4 w-full">
                 <div className="flex justify-end p-3">
-                    <Link to="/admin/logout" className="text-xl bg-red-500 rounded-md p-1 pl-2 pr-2">Logout</Link>
+                    <Link to="/admin/logout" className="text-xl bg-red-500 text-white rounded-md p-1 pl-2 pr-2">Logout</Link>
                 </div>
                 <div className="max-w-sm mx-auto p-4">
                     <h2 className="text-xl font-bold text-center mb-4">Add a Employee</h2>
