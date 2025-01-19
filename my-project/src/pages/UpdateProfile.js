@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from "../account/Authentication";
 import { axiosInstance } from "../axiosInstance";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const UpdateProfile = () => {
     const [employeeData, setEmployeeData] = useState({
@@ -18,6 +18,7 @@ const UpdateProfile = () => {
     });
     const [loading, setLoading] = useState(true);
     const {username} = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchEmployeeData = async () => {
@@ -48,7 +49,7 @@ const UpdateProfile = () => {
     const handleSave = async () => {
         try {
             await axiosInstance.put(`/employee/update`, employeeData);
-            alert("Profile updated successfully!");
+            navigate("/admin/employee");
         } catch (error) {
             console.error("Error updating profile", error);
             alert("Failed to update profile.");

@@ -18,6 +18,7 @@ import SendCode from "./pages/SendCode";
 import AdminLogin from "./pages/AdminLogin";
 import {RequiredAuthenticationAdmin} from "./pages/RequiredAuthenticationAdmin";
 import {AdminLogout} from "./pages/AdminLogout";
+import DeleteEmployee from "./pages/DeleteEmployee";
 
 function App() {
   return (
@@ -34,8 +35,9 @@ function App() {
                   <Route path="/" element={<RequiredAuthentication children={<Dashboard />} /> } />
                   <Route path="/profile" element={<RequiredAuthentication children={<UserProfile />} /> } />
                   <Route path="/admin/employee/add" element={<RequiredAuthenticationAdmin children={<AddEmployee />} />} />
+                  <Route path="/admin/employee/delete/:id" element={<RequiredAuthenticationAdmin children={<DeleteEmployee />} />} />
                   <Route path="/admin" element={<RequiredAuthenticationAdmin children={<WorkRecord />} />} />
-                  <Route path="/employee" element={<Employee />} />
+                  <Route path="/admin/employee" element={<RequiredAuthenticationAdmin children={<Employee />} />} />
                   <Route path="/check-in/:id" element={<RequiredAuthenticationAdmin children={<CheckIn />} />} />
                   <Route path="/update/:username" element={<UpdateProfile />} />
               </Routes>

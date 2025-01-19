@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {axiosInstance} from "../axiosInstance";
 
 function AddEmployee() {
@@ -14,6 +14,7 @@ function AddEmployee() {
         supervisor: '',
         joiningDate: '',
     });
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,7 +28,7 @@ function AddEmployee() {
         try {
             console.log(employeeData)
             await axiosInstance.post("/employee", employeeData);
-            alert("Profile updated successfully!");
+            navigate("/admin/employee");
         } catch (error) {
             console.error("Error updating profile", error);
             alert("Failed to update profile.");
@@ -44,7 +45,7 @@ function AddEmployee() {
                     Get All Work Records
                 </Link>
                 <Link
-                    to="/employee"
+                    to="/admin/employee"
                     className="text-black hover:text-blue-700"
                 >
                     Employee All

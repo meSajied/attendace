@@ -73,7 +73,7 @@ function WorkRecord() {
                     Get All Work Records
                 </Link>
                 <Link
-                    to="/employee"
+                    to="/admin/employee"
                     className="text-black hover:text-blue-700"
                 >
                     Employee All

@@ -47,7 +47,7 @@ function Employee() {
                     Get All Work Records
                 </Link>
                 <Link
-                    to="/employee"
+                    to="/admin/employee"
                     className="text-black hover:text-blue-700"
                 >
                     Employee All
@@ -106,9 +106,15 @@ function Employee() {
                                         </Link>
                                         <Link
                                             to={`/update/${employee.username}`}
-                                            className="text-blue-500 hover:underline"
+                                            className="text-blue-500 hover:underline mr-4"
                                         >
                                             Update
+                                        </Link>
+                                        <Link
+                                            to={`/admin/employee/delete/${employee.id}`}
+                                            className="text-blue-500 hover:underline"
+                                        >
+                                            Delete
                                         </Link>
                                     </td>
                                 </tr>
