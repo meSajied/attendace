@@ -178,7 +178,7 @@ public class EmployeeService {
     System.out.println(this.code);
     if(code == this.code) {
       System.out.println("yes");
-      Admin admin = adminRepository.findByPhone(phone);
+      Admin admin = adminRepository.findByPhone(phone).get();
       System.out.println(admin);
       return admin;
     }
@@ -190,14 +190,18 @@ public class EmployeeService {
     this.code = 1000 + r.nextInt(9000);
     System.out.println(this.code);
 
-    String url = UriComponentsBuilder.fromHttpUrl("https://api.net.bd/sendsms")
-        .queryParam("api_key", "bKIp7TPyAE9u0nc9bSP2hg4xGkjVOftNEK01V20j")
-        .queryParam("to", phone)
-        .queryParam("msg", code)
-        .toUriString();
+    Optional<Admin> a = adminRepository.findByPhone(phone);
 
-    RestTemplate restTemplate = new RestTemplate();
-    restTemplate.getForEntity(url, String.class);
+    if(a.isPresent()) {
+      String url = UriComponentsBuilder.fromHttpUrl("https://api.sms.net.bd/sendsms")
+          .queryParam("api_key", "bKIp7TPyAE9u0nc9bSP2hg4xGkjVOftNEK01V20j")
+          .queryParam("to", phone)
+          .queryParam("msg", code)
+          .toUriString();
+
+      RestTemplate restTemplate = new RestTemplate();
+      restTemplate.getForEntity(url, String.class);
+    }
   }
 
   public Optional<Employee> getEmployeeId(Long id) {

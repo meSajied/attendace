@@ -27,7 +27,7 @@ const SendCode = () => {
             });
             if (response.status === 200) {
                 loginAdmin(response.data);
-                navigate("/admin/dashboard");
+                navigate("/admin");
             }
         }catch(error) {
             setError("Invalid code. Please try again.");
