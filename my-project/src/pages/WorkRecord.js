@@ -119,6 +119,8 @@ function WorkRecord() {
                             <th className="border px-4 py-2">Office Type</th>
                             <th className="border px-4 py-2">Out Time</th>
                             <th className="border px-4 py-2">In Time</th>
+                            <th className="border px-4 py-2">Start Time</th>
+                            <th className="border px-4 py-2">End Time</th>
                             <th className="border px-4 py-2">Employee Email</th>
                         </tr>
                         </thead>
@@ -130,6 +132,8 @@ function WorkRecord() {
                                 <td className="border px-4 py-2">{record.officeType}</td>
                                 <td className="border px-4 py-2">{record.outTime}</td>
                                 <td className="border px-4 py-2">{record.workTime}</td>
+                                <td className="border px-4 py-2">{record.startTime}</td>
+                                <td className="border px-4 py-2">{record.endTime}</td>
                                 <td className="border px-4 py-2">
                                     <a href={`/check-in/${record.employee.id}`}
                                        className="text-blue-500 hover:underline">

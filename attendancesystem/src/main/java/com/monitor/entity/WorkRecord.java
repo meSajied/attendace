@@ -3,6 +3,7 @@ package com.monitor.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class WorkRecord {
@@ -12,6 +13,8 @@ public class WorkRecord {
 
   @ManyToOne
   private Employee employee;
+  private LocalDateTime startTime;
+  private LocalDateTime endTime;
   private long workTime;
   private long outTime;
 
@@ -67,4 +70,19 @@ public class WorkRecord {
     this.officeType = officeType;
   }
 
+  public LocalDateTime getStartTime() {
+    return startTime;
+  }
+
+  public void setStartTime(LocalDateTime startTime) {
+    this.startTime = startTime;
+  }
+
+  public LocalDateTime getEndTime() {
+    return endTime;
+  }
+
+  public void setEndTime(LocalDateTime endTime) {
+    this.endTime = endTime;
+  }
 }

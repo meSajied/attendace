@@ -14,6 +14,7 @@ export function Dashboard() {
     const toggleCheckState = async () => {
         const form = {
             time: new Date().toISOString(),
+            //date: new Date().toISOString().split('T')[0],
             officeType: activeTab,
             username: user.username,
             check: checkState.split(" ").slice(1).at(0),

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,6 +122,7 @@ public class EmployeeController {
       wrget.setEmployee(employee.get());
       wrget.setWorkTime(0);
       wrget.setOutTime(0);
+      wrget.setStartTime(LocalDateTime.now());
       wrget.setOfficeType(request.getOfficeType());
       workRecordRepository.save(wrget);
     }

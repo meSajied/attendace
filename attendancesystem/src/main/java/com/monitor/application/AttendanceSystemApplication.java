@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(scanBasePackages = {"com.monitor.repositories", "com.monitor.application",
-		"com.monitor.controller", "com.monitor.service", "com.monitor.entity"})
+@SpringBootApplication(scanBasePackages = {"com.monitor"})
 @EnableJpaRepositories(basePackages = "com.monitor.repositories")
 @EntityScan(basePackages = "com.monitor.entity")
 public class AttendanceSystemApplication {

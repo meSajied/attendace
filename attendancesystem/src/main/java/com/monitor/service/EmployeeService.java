@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,13 +102,13 @@ public class EmployeeService {
     WorkRecord wr = workRecordRepository.findByEmployeeIdAndDate(employee.getId(), checkInRecord.getTime().toLocalDate()).get();
 
     if(checkInRecord.getChecks() == Checks.IN) {
-      Optional<CheckInRecord> lastCheckout = checksInRepository.findTopByEmployeeIdAndChecksOrderByTimeDesc(
-          checkInRecord.getEmployee().getId(), Checks.OUT);
+      Optional<CheckInRecord> lastCheckout = checksInRepository.findLatestCheckForEmployeeAndToday(
+          Checks.OUT, LocalDate.now(), checkInRecord.getEmployee().getId());
 
       update(checkInRecord, employee, lastCheckout);
     }else if(checkInRecord.getChecks() == Checks.OUT) {
-      Optional<CheckInRecord> lastCheckin = checksInRepository.findTopByEmployeeIdAndChecksOrderByTimeDesc(
-          checkInRecord.getEmployee().getId(), Checks.IN);
+      Optional<CheckInRecord> lastCheckin = checksInRepository.findLatestCheckForEmployeeAndToday(
+          Checks.IN, LocalDate.now(), checkInRecord.getEmployee().getId());
 
       update(checkInRecord, employee, lastCheckin);
     }
@@ -145,6 +146,7 @@ public class EmployeeService {
           if (workRecordOptional.isPresent()) {
             WorkRecord workRecord = workRecordOptional.get();
             workRecord.setOutTime(durationInMinutes);
+            workRecord.setEndTime(LocalDateTime.now());
 
             workRecord.setEmployee(employee);
             List<WorkRecord> c = new ArrayList<>();
@@ -154,7 +156,6 @@ public class EmployeeService {
             workRecordRepository.save(workRecord);
           }
         }
-
       }
   }
 
