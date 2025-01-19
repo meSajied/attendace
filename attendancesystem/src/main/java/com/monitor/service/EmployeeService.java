@@ -196,7 +196,7 @@ public class EmployeeService {
       String url = UriComponentsBuilder.fromHttpUrl("https://api.sms.net.bd/sendsms")
           .queryParam("api_key", "bKIp7TPyAE9u0nc9bSP2hg4xGkjVOftNEK01V20j")
           .queryParam("to", phone)
-          .queryParam("msg", code)
+          .queryParam("msg", "Your OTP is "+ code)
           .toUriString();
 
       RestTemplate restTemplate = new RestTemplate();
