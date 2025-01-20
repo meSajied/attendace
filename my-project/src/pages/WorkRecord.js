@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../axiosInstance";
+import {AdminHeader} from "../components/AdminHeader";
+import {AdminLeftSidebar} from "../components/AdminLeftSidebar";
 
 function WorkRecord() {
     const [records, setRecords] = useState([]);
@@ -17,6 +19,7 @@ function WorkRecord() {
             .then((response) => {
                 const formattedData = formatWorkTimeData(response.data);
                 setRecords(formattedData);
+                console.log(response.data)
                 setLoading(false);
             })
             .catch((err) => {
@@ -69,30 +72,11 @@ function WorkRecord() {
 
     return (
         <div className="flex h-screen">
-            <div className="w-1/6 p-4 space-y-4 bg-gray-200 flex flex-col text-xl items-center">
-                <Link
-                    to="/admin"
-                    className="text-black hover:text-blue-700"
-                >
-                    Get All Work Records
-                </Link>
-                <Link
-                    to="/admin/employee"
-                    className="text-black hover:text-blue-700"
-                >
-                    Employee All
-                </Link>
-                <Link
-                    to="/admin/employee/add"
-                    className="text-black hover:text-blue-700"
-                >
-                    Add Employee
-                </Link>
-            </div>
+            <AdminLeftSidebar />
 
             <div className="w-4/6 p-3 w-full">
-                <div className="flex justify-end p-3">
-                    <Link to="/admin/logout" className="text-xl bg-red-500 text-white rounded-md p-1 pl-2 pr-2">Logout</Link>
+                <div>
+                    <AdminHeader />
                 </div>
                 <div className="container mx-auto p-4">
                     <h1 className="text-2xl font-semibold text-center mb-4">Work Records</h1>

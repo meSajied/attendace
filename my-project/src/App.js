@@ -19,27 +19,36 @@ import AdminLogin from "./pages/AdminLogin";
 import {RequiredAuthenticationAdmin} from "./pages/RequiredAuthenticationAdmin";
 import {AdminLogout} from "./pages/AdminLogout";
 import DeleteEmployee from "./pages/DeleteEmployee";
+import {
+    ADMIN_ADD_EMPLOYEE, ADMIN_DASHBOARD, ADMIN_DELETE_EMPLOYEE, ADMIN_EMPLOYEE_LIST,
+    ADMIN_LOGIN,
+    ADMIN_LOGOUT,
+    ADMIN_REGISTER,
+    ADMIN_SEND_CODE, ADMIN_USER_UPDATE, USER_CHECKIN,
+    USER_DASHBOARD,
+    USER_LOGIN,
+    USER_LOGOUT, USER_PROFILE
+} from "./routes";
 
 function App() {
   return (
       <AuthProvider>
           <BrowserRouter>
               <Routes>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/logout" element={<Logout />} />
-                  <Route path="/admin/logout" element={<AdminLogout />} />
-                  <Route path="/admin/register" element={<AdminRegister />} />
-                  <Route path="/admin/dashboard" element={<RequiredAuthenticationAdmin children={<AdminDashboard />} />} />
-                  <Route path="/admin/code" element={<SendCode />} />
-                  <Route path="/admin/login" element={<AdminLogin />} />
-                  <Route path="/" element={<RequiredAuthentication children={<Dashboard />} /> } />
-                  <Route path="/profile" element={<RequiredAuthentication children={<UserProfile />} /> } />
-                  <Route path="/admin/employee/add" element={<RequiredAuthenticationAdmin children={<AddEmployee />} />} />
-                  <Route path="/admin/employee/delete/:id" element={<RequiredAuthenticationAdmin children={<DeleteEmployee />} />} />
-                  <Route path="/admin" element={<RequiredAuthenticationAdmin children={<WorkRecord />} />} />
-                  <Route path="/admin/employee" element={<RequiredAuthenticationAdmin children={<Employee />} />} />
-                  <Route path="/check-in/:id" element={<RequiredAuthenticationAdmin children={<CheckIn />} />} />
-                  <Route path="/update/:username" element={<UpdateProfile />} />
+                  <Route path={USER_LOGIN} element={<Login />} />
+                  <Route path={USER_LOGOUT} element={<Logout />} />
+                  <Route path={ADMIN_LOGOUT} element={<AdminLogout />} />
+                  <Route path={ADMIN_REGISTER} element={<AdminRegister />} />
+                  <Route path={ADMIN_SEND_CODE} element={<SendCode />} />
+                  <Route path={ADMIN_LOGIN} element={<AdminLogin />} />
+                  <Route path={USER_DASHBOARD} element={<RequiredAuthentication children={<Dashboard />} /> } />
+                  <Route path={USER_PROFILE} element={<RequiredAuthentication children={<UserProfile />} /> } />
+                  <Route path={ADMIN_ADD_EMPLOYEE} element={<RequiredAuthenticationAdmin children={<AddEmployee />} />} />
+                  <Route path={ADMIN_DELETE_EMPLOYEE} element={<RequiredAuthenticationAdmin children={<DeleteEmployee />} />} />
+                  <Route path={ADMIN_DASHBOARD} element={<RequiredAuthenticationAdmin children={<WorkRecord />} />} />
+                  <Route path={ADMIN_EMPLOYEE_LIST} element={<RequiredAuthenticationAdmin children={<Employee />} />} />
+                  <Route path={USER_CHECKIN} element={<RequiredAuthenticationAdmin children={<CheckIn />} />} />
+                  <Route path={ADMIN_USER_UPDATE} element={<RequiredAuthenticationAdmin children={<UpdateProfile />} />} />
               </Routes>
           </BrowserRouter>
       </AuthProvider>
