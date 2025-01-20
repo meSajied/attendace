@@ -116,8 +116,6 @@ public class EmployeeService {
     checkInRecord.setEmployee(employee);
     List<CheckInRecord> c = new ArrayList<>();
     c.add(checkInRecord);
-    employee.setCheckInRecord(c);
-    employeeRepository.save(employee);
     System.out.println("HI");
     return checksInRepository.save(checkInRecord);
   }
@@ -130,10 +128,11 @@ public class EmployeeService {
         Optional<WorkRecord> workRecordOptional = workRecordRepository
                  .findByEmployeeIdAndDate(checkInRecord.getEmployee().getId(), LocalDate.now());
 
-        if(lastCheckInRecord.getChecks() == Checks.IN) {
+        if(checkInRecord.getChecks() == Checks.OUT) {
           if (workRecordOptional.isPresent()) {
             WorkRecord workRecord = workRecordOptional.get();
             workRecord.setWorkTime(durationInMinutes);
+            workRecord.setEndTime(LocalDateTime.now());
 
             workRecord.setEmployee(employee);
             List<WorkRecord> c = new ArrayList<>();
@@ -142,11 +141,10 @@ public class EmployeeService {
 
             workRecordRepository.save(workRecord);
           }
-        } else if (lastCheckInRecord.getChecks() == Checks.OUT) {
+        } else if (checkInRecord.getChecks() == Checks.IN) {
           if (workRecordOptional.isPresent()) {
             WorkRecord workRecord = workRecordOptional.get();
             workRecord.setOutTime(durationInMinutes);
-            workRecord.setEndTime(LocalDateTime.now());
 
             workRecord.setEmployee(employee);
             List<WorkRecord> c = new ArrayList<>();
