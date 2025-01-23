@@ -145,11 +145,10 @@ export function Dashboard() {
             </div>
 
             <div className="h-screen flex flex-col items-center justify-center space-y-3 bg-gray-100 p-4">
-                <div className="flex text-left w-full p-2 pl-5 pr-5">
-                    <p className="font-josefin text-xl">Hello, {user?.name}</p>
-                </div>
+
                 <div className="w-full max-w-sm bg-white rounded-lg shadow-lg">
                     <div className="flex border-b font-chakra">
+
                         <button
                             className={`flex-1 py-2 text-center ${activeTab === "HOME" ? "bg-red-400 text-white" : "bg-gray-200 text-gray-800"}`}
                             onClick={() => setActiveTab("HOME")}
@@ -162,6 +161,10 @@ export function Dashboard() {
                         >
                             Office
                         </button>
+                    </div>
+
+                    <div className="flex text-left w-full p-2 pl-5 pr-5">
+                        <p className="font-josefin text-xl">Hello, {user?.name}</p>
                     </div>
 
                     <div className="p-4">
