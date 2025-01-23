@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import {axiosInstance} from "../axiosInstance";
 import {useNavigate} from "react-router";
+import {Loading} from "../components/Loading";
+import {ADMIN_EMPLOYEE_LIST} from "../routes";
 
 function AdminRegister() {
     const navigate = useNavigate();
@@ -34,7 +36,7 @@ function AdminRegister() {
             console.error("Error during registration:", err);
         } finally {
             setLoading(false);
-            navigate("/admin/dashboard")
+            navigate(ADMIN_EMPLOYEE_LIST)
         }
     };
 
@@ -109,7 +111,7 @@ function AdminRegister() {
                         className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         disabled={loading}
                     >
-                        {loading ? "Registering..." : "Register"}
+                        {loading ? <Loading /> : "Register"}
                     </button>
                 </form>
             </div>

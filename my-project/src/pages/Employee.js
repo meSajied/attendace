@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../axiosInstance";
-import { AdminHeader } from "../components/AdminHeader";
+import { Header } from "../components/Header";
 import { AdminLeftSidebar } from "../components/AdminLeftSidebar";
+import LoadingPage from "./LoadingPage";
 
 function Employee() {
     const [employees, setEmployees] = useState([]);
@@ -12,10 +13,16 @@ function Employee() {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const [filterCriteria, setFilterCriteria] = useState({
-        gender: "",
+        gender: "ALL",
         department: "",
         designation: "",
         supervisor: "",
+        username: "",
+        name: "",
+        email: "",
+        workEmail: "",
+        phone: "",
+        joiningDate: "",
     });
 
     const [columnsVisibility, setColumnsVisibility] = useState({
@@ -23,6 +30,7 @@ function Employee() {
         username: true,
         name: true,
         email: true,
+        //workEmail: true,
         phone: true,
         gender: true,
         department: true,
@@ -38,6 +46,7 @@ function Employee() {
             .get("employee/get-all")
             .then((response) => {
                 setEmployees(response.data);
+                console.log(response.data)
                 setFilteredEmployees(response.data);
                 setLoading(false);
             })
@@ -99,11 +108,19 @@ function Employee() {
                 employee.name.toLowerCase().includes(filterCriteria.name.toLowerCase())
             );
         }
+
         if (filterCriteria.email) {
             filtered = filtered.filter((employee) =>
                 employee.email.toLowerCase().includes(filterCriteria.email.toLowerCase())
             );
         }
+
+        if (filterCriteria.workEmail) {
+            filtered = filtered.filter((employee) =>
+                employee.workEmail.toLowerCase().includes(filterCriteria.workEmail.toLowerCase())
+            );
+        }
+
         if (filterCriteria.phone) {
             filtered = filtered.filter((employee) =>
                 employee.phone.toLowerCase().includes(filterCriteria.phone.toLowerCase())
@@ -124,9 +141,7 @@ function Employee() {
 
     if (loading) {
         return (
-            <div className="text-center text-lg text-gray-600">
-                <p>Loading...</p>
-            </div>
+            <LoadingPage />
         );
     }
 
@@ -148,7 +163,7 @@ function Employee() {
                 }`}
             >
                 <div>
-                    <AdminHeader />
+                    <Header />
                 </div>
                 <div className="p-4">
                     <h1 className="text-3xl font-semibold text-center mb-6">Employee List</h1>
@@ -211,31 +226,25 @@ function Employee() {
                                     {columnsVisibility.id && <td className="p-4 text-sm text-gray-600">{employee.id}</td>}
                                     {columnsVisibility.username && <td className="p-4 text-sm text-gray-600">{employee.username}</td>}
                                     {columnsVisibility.name && <td className="p-4 text-sm text-gray-600">{employee.name}</td>}
-                                    {columnsVisibility.email && <td className="p-4 text-sm text-gray-600">{employee.email}</td>}
+                                    {(columnsVisibility.email || columnsVisibility.workEmail) && <td className="p-4 text-sm text-gray-600">{employee.email}<div>{employee.workEmail}</div></td>}
                                     {columnsVisibility.phone && <td className="p-4 text-sm text-gray-600">{employee.phone}</td>}
                                     {columnsVisibility.gender && <td className="p-4 text-sm text-gray-600">{employee.gender}</td>}
                                     {columnsVisibility.department && <td className="p-4 text-sm text-gray-600">{employee.department}</td>}
                                     {columnsVisibility.designation && <td className="p-4 text-sm text-gray-600">{employee.designation}</td>}
                                     {columnsVisibility.supervisor && <td className="p-4 text-sm text-gray-600">{employee.supervisor}</td>}
                                     {columnsVisibility.joiningDate && <td className="p-4 text-sm text-gray-600">{employee.joiningDate}</td>}
-                                    <td className="p-4 text-sm text-gray-600">
+                                    <td className="p-4 text-sm flex flex-col space-y-2 text-gray-600">
                                         <Link
-                                            to={`/check-in/${employee.id}`}
+                                            to={`/update/${employee.id}`}
                                             className="text-blue-500 hover:underline mr-4"
                                         >
-                                            Check-in
+                                            Profile
                                         </Link>
                                         <Link
-                                            to={`/update/${employee.username}`}
-                                            className="text-blue-500 hover:underline mr-4"
-                                        >
-                                            Update
-                                        </Link>
-                                        <Link
-                                            to={`/admin/employee/delete/${employee.id}`}
+                                            to={`/work-record/${employee.id}`}
                                             className="text-blue-500 hover:underline"
                                         >
-                                            Delete
+                                            Work Report
                                         </Link>
                                     </td>
                                 </tr>
@@ -302,6 +311,16 @@ function Employee() {
                         </div>
 
                         <div className="flex space-x-2">
+                            <label htmlFor="workEmail" className="text-xl">Work Email:</label>
+                            <input
+                                name="workEmail"
+                                value={filterCriteria.workEmail}
+                                onChange={handleFilterChange}
+                                className="text-black border-2 border-black rounded-md w-full"
+                            />
+                        </div>
+
+                        <div className="flex space-x-2">
                             <label htmlFor="phone" className="text-xl">Phone:</label>
                             <input
                                 name="phone"
@@ -352,11 +371,11 @@ function Employee() {
                             />
                         </div>
 
-                        </div>
                     </div>
                 </div>
             </div>
-            );
-            }
+        </div>
+    );
+}
 
-            export default Employee;
+export default Employee;

@@ -1,139 +1,159 @@
 import React, { useState } from 'react';
 import { useAuth } from "../account/Authentication";
-import {axiosInstance} from "../axiosInstance";
+import { axiosInstance } from "../axiosInstance";
+import { Ztrios } from "../components/Ztrios";
+import { Link } from "react-router-dom";
+import { USER_LOGOUT } from "../routes";
+import {Loading} from "../components/Loading";
+import {Header} from "../components/Header";
 
 const UserProfile = () => {
-    const { user } = useAuth();
+    const { user, login } = useAuth();
+    const [isEditing, setEditing] = useState(false);
+    const [isLoading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         id: user.id,
         username: user.username,
-        name: user.name || '',
-        email: user.email || '',
-        phone: user.phone || '',
-        gender: user.gender || '',
-        department: user.department || '',
-        designation: user.designation || '',
-        supervisor: user.supervisor || '',
+        name: user.name || "N/A",
+        email: user.email || "N/A",
+        phone: user.phone || "N/A",
+        gender: user.gender || "N/A",
+        department: user.department || "N/A",
+        designation: user.designation || "N/A",
+        supervisor: user.supervisor || "N/A",
         joiningDate: user.joiningDate
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    const handleSubmit = async (e) => {
+    function handleChange(e) {
         e.preventDefault();
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    }
 
-        try {
-            const response = await axiosInstance.put('/employee/update', formData);
-            if (response.status === 200) {
-                alert('Profile updated successfully');
-            }
-        } catch (error) {
-            alert('Failed to update profile');
-            console.error(error);
-        }
-    };
+    async function handleSubmit(e, url="/employee/update") {
+        e.preventDefault();
+        setLoading(true);
+        await axiosInstance.put(url, formData)
+            .then((res) => {
+                if (res.status === 200) {
+                    console.log(res.data);
+                    login(res.data);
+                    setEditing(!isEditing);
+                }
+            }).catch(err => {
+                console.log(err)
+                alert("Could not update user");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }
+
+    function toggleEditing(e) {
+        e.preventDefault();
+        setEditing(!isEditing);
+    }
+
+
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-            <h2 className="text-2xl font-semibold mb-6">User Profile</h2>
+        <div className="space-y-3 p-4 sm:p-2">
+            <Header />
 
-            <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700">Full Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="bg-gray-100 p-2 rounded"
-                        />
+            <div>
+                <p className="font-chakra font-semibold text-center text-lg sm:text-xl">USER PROFILE</p>
+            </div>
+
+            {isEditing ? (
+                <form onSubmit={handleSubmit} className="space-y-3">
+                    <div className="flex flex-col items-center font-josefin space-y-3 px-4 sm:px-6">
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
+                            <label htmlFor="name" className="text-sm">Name:</label>
+                            <input name="name" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.name} onChange={handleChange}/>
+                        </div>
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
+                            <label htmlFor="gender" className="text-sm">Gender</label>
+                            <select
+                                id="gender"
+                                name="gender"
+                                value={formData.gender}
+                                onChange={handleChange}
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="email" className="text-sm">Email:</label>
+                            <input name="email" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.email} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="designation" className="text-sm">Designation:</label>
+                            <input name="designation" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.designation} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="department" className="text-sm">Department:</label>
+                            <input name="department" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.department} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="supervisor" className="text-sm">Supervisor:</label>
+                            <input name="supervisor" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.supervisor} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex justify-around items-center space-x-4 sm:space-x-8">
+                            {isLoading ? (
+                                <button type="submit"
+                                        className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">
+                                    <Loading/></button>
+                            ) : (
+                                <button type="submit"
+                                        className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">Save</button>
+                            )}
+
+                            <button onClick={toggleEditing}
+                                    className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">Cancel
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            ) : (
+
+                <form className="space-y-3">
+                    <div className="font-josefin flex flex-col items-center justify-center space-y-2">
+                        <div>Name: {formData.name}</div>
+                        <div>Email: {formData.email}</div>
+                        <div>Phone: {formData.phone}</div>
+                        <div>Gender: {formData.gender}</div>
+                        <div>Designation: {formData.designation}</div>
+                        <div>Department: {formData.department}</div>
+                        <div>Supervisor: {formData.supervisor}</div>
+                        <div>Date of Join: {formData.joiningDate}</div>
                     </div>
 
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="bg-gray-100 p-2 rounded"
-                        />
+                    <div className="flex justify-center">
+                        <button onClick={toggleEditing}
+                                className="font-josefin text-end rounded-md bg-black text-white p-1 pl-2 pr-2 text-sm">EDIT
+                        </button>
                     </div>
-
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700">Phone</label>
-                        <input
-                            type="text"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            className="bg-gray-100 p-2 rounded"
-                        />
-                    </div>
-
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700">Gender</label>
-                        <input
-                            type="text"
-                            name="gender"
-                            value={formData.gender}
-                            onChange={handleChange}
-                            className="bg-gray-100 p-2 rounded"
-                        />
-                    </div>
-
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700">Department</label>
-                        <input
-                            type="text"
-                            name="department"
-                            value={formData.department}
-                            onChange={handleChange}
-                            className="bg-gray-100 p-2 rounded"
-                        />
-                    </div>
-
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700">Designation</label>
-                        <input
-                            type="text"
-                            name="designation"
-                            value={formData.designation}
-                            onChange={handleChange}
-                            className="bg-gray-100 p-2 rounded"
-                        />
-                    </div>
-
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700">Supervisor</label>
-                        <input
-                            type="text"
-                            name="supervisor"
-                            value={formData.supervisor}
-                            onChange={handleChange}
-                            className="bg-gray-100 p-2 rounded"
-                        />
-                    </div>
-                </div>
-
-                <div className="mt-6 flex justify-end">
-                    <button
-                        type="submit"
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-                    >
-                        Save
-                    </button>
-                </div>
-            </form>
+                </form>
+            )}
         </div>
     );
 };
 
-export { UserProfile };
+export {UserProfile};

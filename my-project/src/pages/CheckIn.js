@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import {axiosInstance} from "../axiosInstance";
 
 function CheckIn() {
     const { id } = useParams();
+    const queryParams = new URLSearchParams(useLocation().search);
+    const date = queryParams.get('date');
     const [checkIns, setCheckIns] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -11,7 +13,14 @@ function CheckIn() {
     useEffect(() => {
         const fetchCheckIns = async () => {
             try {
-                const response = await axiosInstance.get(`/check-ins/${id}`);
+                const response = await axiosInstance.get(`/check-ins/${id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        date: date
+                    }
+                });
                 console.log(response.data)
                 setCheckIns(response.data);
             } catch (err) {
@@ -23,6 +32,8 @@ function CheckIn() {
 
         fetchCheckIns();
     }, []);
+
+    console.log(date)
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -49,7 +60,7 @@ function CheckIn() {
                             key={index}
                             className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
                         >
-                            <p className="text-lg font-semibold">{checkIn.checks}</p>
+                            <p className="text-lg font-semibold">{"Check" + checkIn.checks}</p>
                             <p className="text-sm text-gray-500">Time: {formatDate(checkIn.time)}</p>
                         </div>
                     ))

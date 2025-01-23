@@ -4,35 +4,46 @@ import { useNavigate } from "react-router-dom";
 import {axiosInstance} from "../axiosInstance";
 import {useAuth} from "../account/Authentication";
 import login from "../account/Login";
+import {ADMIN_EMPLOYEE_LIST} from "../routes";
+import {Loading} from "../components/Loading";
 
 const SendCode = () => {
     const {loginAdmin} = useAuth();
     const [code, setCode] = useState("");
     const [error, setError] = useState("");
     const [phone, setPhone] = useState("");
+    const [isLoading, setLoading] = useState(false);
+    const {isAdminLoggedIn} = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            setLoading(true);
             const response = await axiosInstance.get("/admin/login", {
                 headers: {
                     "Content-Type": "application/json",
                 },
                 params: {
                     phone: phone,
-                    code: code,
+                    code: Number(code),
                 }
             });
             if (response.status === 200) {
                 loginAdmin(response.data);
-                navigate("/admin");
+                navigate(ADMIN_EMPLOYEE_LIST);
             }
         }catch(error) {
             setError("Invalid code. Please try again.");
+        }finally {
+            setLoading(false);
         }
     };
+
+    if(isAdminLoggedIn) {
+        navigate(ADMIN_EMPLOYEE_LIST);
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -61,12 +72,18 @@ const SendCode = () => {
                         />
 
                     </div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none"
-                    >
-                        Submit
-                    </button>
+                    <div>
+                        {isLoading ? (
+                            <Loading />
+                        ) : (
+                            <button
+                                type="submit"
+                                className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none"
+                            >
+                                Submit
+                            </button>
+                        )}
+                    </div>
                 </form>
             </div>
         </div>

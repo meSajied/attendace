@@ -3,17 +3,22 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {axiosInstance} from "../axiosInstance";
 import {useAuth} from "../account/Authentication";
+import {Loading} from "../components/Loading";
+import {ADMIN_EMPLOYEE_LIST} from "../routes";
 
 const AdminLogin = () => {
 
     const [error, setError] = useState("");
     const [phone, setPhone] = useState("");
+    const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const {isAdminLoggedIn} = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            setLoading(true);
             const response = await axiosInstance.get("/send-sms", {
                 headers: {
                     "Content-Type": "application/json",
@@ -29,8 +34,14 @@ const AdminLogin = () => {
             }
         }catch(error) {
             setError("Please try again.");
+        }finally {
+            setLoading(false);
         }
     };
+
+    if(isAdminLoggedIn) {
+        navigate(ADMIN_EMPLOYEE_LIST);
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -49,12 +60,18 @@ const AdminLogin = () => {
                         />
 
                     </div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none"
-                    >
-                        Submit
-                    </button>
+                    <div className="flex justify-center">
+                        {isLoading ? (
+                            <Loading />
+                        ) : (
+                            <button
+                                type="submit"
+                                className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none"
+                            >
+                                Submit
+                            </button>
+                        )}
+                    </div>
                 </form>
             </div>
         </div>

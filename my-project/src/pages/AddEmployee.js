@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {axiosInstance} from "../axiosInstance";
-import {AdminHeader} from "../components/AdminHeader";
+import {Header} from "../components/Header";
 import {AdminLeftSidebar} from "../components/AdminLeftSidebar";
+import {Loading} from "../components/Loading";
 
 function AddEmployee() {
     const [employeeData, setEmployeeData] = useState({
@@ -17,6 +18,7 @@ function AddEmployee() {
         joiningDate: '',
     });
     const navigate = useNavigate();
+    const [isLoading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,8 +28,9 @@ function AddEmployee() {
         }));
     };
 
-    const handleAdd = async () => {
+    const handleSubmit = async () => {
         try {
+            setLoading(true);
             console.log(employeeData)
             await axiosInstance.post("/employee", employeeData);
             navigate("/admin/employee");
@@ -35,85 +38,31 @@ function AddEmployee() {
             console.error("Error updating profile", error);
             alert("Failed to update profile.");
         }
+        finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="flex h-screen">
             <AdminLeftSidebar />
 
-            <div className="w-4/6 p-4 w-full">
+            <div className="w-4/6 p-4">
                 <div>
-                    <AdminHeader />
+                    <Header />
                 </div>
                 <div className="max-w-sm mx-auto p-4">
                     <h2 className="text-xl font-bold text-center mb-4">Add a Employee</h2>
 
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-1 gap-4">
-                            <div>
-                                <label htmlFor="name"
-                                       className="block text-sm font-medium text-gray-700">Username</label>
-                                <input
-                                    type="text"
-                                    id="username"
-                                    name="username"
-                                    value={employeeData.username}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
+                    <form onSubmit={handleSubmit} className="space-y-3">
+                        <div className="flex flex-col items-center font-josefin space-y-3 px-4 sm:px-6">
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
+                                <label htmlFor="name" className="text-sm">Name:</label>
+                                <input name="name" className="border rounded border-black p-2 text-center w-full"
+                                       value={employeeData.name} onChange={handleChange}/>
                             </div>
-                            <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={employeeData.name}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={employeeData.email}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-
-                            <div>
-                                <label htmlFor="password"
-                                       className="block text-sm font-medium text-gray-700">Password</label>
-                                <input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    value={employeeData.password}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-
-                            <div>
-                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
-                                <input
-                                    type="text"
-                                    id="phone"
-                                    name="phone"
-                                    value={employeeData.phone}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-
-                            <div>
-                                <label htmlFor="gender"
-                                       className="block text-sm font-medium text-gray-700">Gender</label>
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
+                                <label htmlFor="gender" className="text-sm">Gender</label>
                                 <select
                                     id="gender"
                                     name="gender"
@@ -128,68 +77,42 @@ function AddEmployee() {
                                 </select>
                             </div>
 
-                            <div>
-                                <label htmlFor="department"
-                                       className="block text-sm font-medium text-gray-700">Department</label>
-                                <input
-                                    type="text"
-                                    id="department"
-                                    name="department"
-                                    value={employeeData.department}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                                <label htmlFor="email" className="text-sm">Email:</label>
+                                <input name="email" className="border rounded border-black p-2 text-center w-full"
+                                       value={employeeData.email} onChange={handleChange}/>
                             </div>
 
-                            <div>
-                                <label htmlFor="designation"
-                                       className="block text-sm font-medium text-gray-700">Designation</label>
-                                <input
-                                    type="text"
-                                    id="designation"
-                                    name="designation"
-                                    value={employeeData.designation}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                                <label htmlFor="designation" className="text-sm">Designation:</label>
+                                <input name="designation" className="border rounded border-black p-2 text-center w-full"
+                                       value={employeeData.designation} onChange={handleChange}/>
                             </div>
 
-                            <div>
-                                <label htmlFor="supervisor"
-                                       className="block text-sm font-medium text-gray-700">Supervisor</label>
-                                <input
-                                    type="text"
-                                    id="supervisor"
-                                    name="supervisor"
-                                    value={employeeData.supervisor}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                                <label htmlFor="department" className="text-sm">Department:</label>
+                                <input name="department" className="border rounded border-black p-2 text-center w-full"
+                                       value={employeeData.department} onChange={handleChange}/>
                             </div>
 
-                            <div>
-                                <label htmlFor="joiningDate" className="block text-sm font-medium text-gray-700">Joining
-                                    Date</label>
-                                <input
-                                    type="date"
-                                    id="joiningDate"
-                                    name="joiningDate"
-                                    value={employeeData.joiningDate}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                                <label htmlFor="supervisor" className="text-sm">Supervisor:</label>
+                                <input name="supervisor" className="border rounded border-black p-2 text-center w-full"
+                                       value={employeeData.supervisor} onChange={handleChange}/>
                             </div>
 
-                            <div className="text-center">
-                                <button
-                                    onClick={handleAdd}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                                >
-                                    Add
-                                </button>
+                            <div className="flex justify-around items-center space-x-4 sm:space-x-8">
+                                {isLoading ? (
+                                    <button type="submit"
+                                            className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">
+                                        <Loading/></button>
+                                ) : (
+                                    <button type="submit"
+                                            className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">Save</button>
+                                )}
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

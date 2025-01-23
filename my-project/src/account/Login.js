@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { useAuth } from "./Authentication";
 import { Navigate } from "react-router";
 import { axiosInstance } from "../axiosInstance";
+import {Loading} from "../components/Loading";
 
 const Login = () => {
     const [formData, setFormData] = useState({
         username: "",
         password: ""
     });
+    const [isLoading, setLoading] = useState(false);
     const [showWarning, setShowWarning] = useState(false);
 
     const { login, isLoggedIn } = useAuth();
@@ -69,12 +71,16 @@ const Login = () => {
                     </div>
 
                     <div className="flex justify-center">
-                        <button
-                            type="submit"
-                            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md focus:outline-none hover:bg-blue-600 focus:ring-2 focus:ring-blue-500"
-                        >
-                            Login
-                        </button>
+                        {isLoading ? (
+                            <Loading />
+                        ) : (
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md focus:outline-none hover:bg-blue-600 focus:ring-2 focus:ring-blue-500"
+                            >
+                                Login
+                            </button>
+                        )}
                     </div>
                 </form>
             </div>
@@ -85,6 +91,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
+            setLoading(true);
             await axiosInstance
                 .post('/employee/login', formData, {
                     headers: {
@@ -105,6 +112,8 @@ const Login = () => {
             console.log(e);
             clearData();
             setShowWarning(true);
+        }finally {
+            setLoading(false);
         }
     }
 

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from "../account/Authentication";
 import { axiosInstance } from "../axiosInstance";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {Ztrios} from "../components/Ztrios";
+import {USER_LOGOUT} from "../routes";
+import {Loading} from "../components/Loading";
+import LoadingPage from "./LoadingPage";
 
 const UpdateProfile = () => {
-    const [employeeData, setEmployeeData] = useState({
+    const [formData, setFormData] = useState({
         id: '',
         username: '',
         name: '',
@@ -16,39 +20,43 @@ const UpdateProfile = () => {
         supervisor: '',
         joiningDate: '',
     });
-    const [loading, setLoading] = useState(true);
-    const {username} = useParams();
+    const [isLoading, setLoading] = useState(true);
+    const [isEditing, setEditing] = useState(false);
+    const {id} = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchEmployeeData = async () => {
             try {
-                const response = await axiosInstance.get(`/employee/username/${username}`);
-                setEmployeeData(response.data);
+                setLoading(true)
+                const response = await axiosInstance.get(`/employee/id/${Number(id)}`);
+                setFormData(response.data);
                 console.log(response.data);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching employee data", error);
                 setLoading(false);
+            }finally {
+                setLoading(false);
             }
         };
 
-        if (username) {
+        if (id) {
             fetchEmployeeData();
         }
     }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEmployeeData((prevData) => ({
+        setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
     };
 
-    const handleSave = async () => {
+    const handleSubmit = async () => {
         try {
-            await axiosInstance.put(`/employee/update`, employeeData);
+            await axiosInstance.put(`/employee/update`, formData);
             navigate("/admin/employee");
         } catch (error) {
             console.error("Error updating profile", error);
@@ -56,127 +64,120 @@ const UpdateProfile = () => {
         }
     };
 
-    if (loading) {
-        return <div className="text-center">Loading...</div>;
+    function toggleEditing(e) {
+        e.preventDefault();
+        setEditing(!isEditing);
+    }
+
+
+    if (isLoading) {
+        return <LoadingPage />
     }
 
     return (
-        <div className="max-w-sm mx-auto p-4">
-            <h2 className="text-xl font-bold text-center mb-4">Update Profile</h2>
-            <div className="space-y-4">
-                <div className="grid grid-cols-1 gap-4">
-                    <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={employeeData.name}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                    </div>
+        <div className="space-y-3 p-4 sm:p-2">
+            <div className="p-2 flex justify-between items-center">
+                <div>
+                    <Link to="/"><Ztrios/></Link>
+                </div>
 
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={employeeData.email}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
-                        <input
-                            type="text"
-                            id="phone"
-                            name="phone"
-                            value={employeeData.phone}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender</label>
-                        <select
-                            id="gender"
-                            name="gender"
-                            value={employeeData.gender}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                        >
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label htmlFor="department" className="block text-sm font-medium text-gray-700">Department</label>
-                        <input
-                            type="text"
-                            id="department"
-                            name="department"
-                            value={employeeData.department}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="designation" className="block text-sm font-medium text-gray-700">Designation</label>
-                        <input
-                            type="text"
-                            id="designation"
-                            name="designation"
-                            value={employeeData.designation}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="supervisor" className="block text-sm font-medium text-gray-700">Supervisor</label>
-                        <input
-                            type="text"
-                            id="supervisor"
-                            name="supervisor"
-                            value={employeeData.supervisor}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="joiningDate" className="block text-sm font-medium text-gray-700">Joining Date</label>
-                        <input
-                            type="date"
-                            id="joiningDate"
-                            name="joiningDate"
-                            value={employeeData.joiningDate}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                    </div>
-
-                    <div className="text-center">
-                        <button
-                            onClick={handleSave}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                        >
-                            Save
-                        </button>
-                    </div>
+                <div className="mr-2">
+                    <Link to={USER_LOGOUT}
+                          className="text-white border rounded bg-black p-2 text-xs sm:text-sm">Logout</Link>
                 </div>
             </div>
+
+            <div>
+                <p className="font-chakra font-semibold text-center text-lg sm:text-xl">USER PROFILE</p>
+            </div>
+
+            {isEditing ? (
+                <form onSubmit={handleSubmit} className="space-y-3">
+                    <div className="flex flex-col items-center font-josefin space-y-3 px-4 sm:px-6">
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
+                            <label htmlFor="name" className="text-sm">Name:</label>
+                            <input name="name" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.name} onChange={handleChange}/>
+                        </div>
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
+                            <label htmlFor="gender" className="text-sm">Gender</label>
+                            <select
+                                id="gender"
+                                name="gender"
+                                value={formData.gender}
+                                onChange={handleChange}
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="email" className="text-sm">Email:</label>
+                            <input name="email" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.email} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="designation" className="text-sm">Designation:</label>
+                            <input name="designation" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.designation} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="department" className="text-sm">Department:</label>
+                            <input name="department" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.department} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="supervisor" className="text-sm">Supervisor:</label>
+                            <input name="supervisor" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.supervisor} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex justify-around items-center space-x-4 sm:space-x-8">
+                            {isLoading ? (
+                                <button type="submit"
+                                        className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">
+                                    <Loading/></button>
+                            ) : (
+                                <button type="submit"
+                                        className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">Save</button>
+                            )}
+
+                            <button onClick={toggleEditing}
+                                    className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">Cancel
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            ) : (
+
+                <form className="space-y-3">
+                    <div className="font-josefin flex flex-col items-center justify-center space-y-2">
+                        <div>Name: {formData.name}</div>
+                        <div>Email: {formData.email}</div>
+                        <div>Phone: {formData.phone}</div>
+                        <div>Gender: {formData.gender}</div>
+                        <div>Designation: {formData.designation}</div>
+                        <div>Department: {formData.department}</div>
+                        <div>Supervisor: {formData.supervisor}</div>
+                        <div>Date of Join: {formData.joiningDate}</div>
+                    </div>
+
+                    <div className="flex justify-center">
+                        <button onClick={toggleEditing}
+                                className="font-josefin text-end rounded-md bg-black text-white p-1 pl-2 pr-2 text-sm">EDIT
+                        </button>
+                    </div>
+                </form>
+            )}
         </div>
     );
 };
 
-export { UpdateProfile };
+export {UpdateProfile};
