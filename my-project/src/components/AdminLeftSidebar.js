@@ -4,7 +4,7 @@ import {ADMIN_ADD_EMPLOYEE, ADMIN_DASHBOARD, ADMIN_EMPLOYEE_LIST} from "../route
 
 function AdminLeftSidebar() {
     return (
-        <div className=" w-[15%] p-4 space-y-4 bg-gray-200 flex flex-col text-xl items-center h-screen">
+        <div className=" w-[15%] p-4 space-y-4 bg-gray-200 flex flex-col text-xl font-space items-center h-screen">
             <Link
                 to={ADMIN_EMPLOYEE_LIST}
                 className="text-black hover:text-blue-700"

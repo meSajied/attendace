@@ -4,6 +4,7 @@ import { axiosInstance } from "../axiosInstance";
 import { Header } from "../components/Header";
 import { AdminLeftSidebar } from "../components/AdminLeftSidebar";
 import LoadingPage from "./LoadingPage";
+import login from "../account/Login";
 
 function Employee() {
     const [employees, setEmployees] = useState([]);
@@ -20,7 +21,7 @@ function Employee() {
         username: "",
         name: "",
         email: "",
-        //workEmail: "",
+        workEmail: "",
         phone: "",
         joiningDate: "",
     });
@@ -30,7 +31,7 @@ function Employee() {
         username: true,
         name: true,
         email: true,
-        //workEmail: true,
+        workEmail: true,
         phone: true,
         gender: true,
         department: true,
@@ -115,6 +116,12 @@ function Employee() {
             );
         }
 
+        if (filterCriteria.workEmail) {
+            filtered = filtered.filter((employee) =>
+                employee.workEmail.toLowerCase() === filterCriteria.workEmail.toLowerCase().trim()
+            );
+        }
+
         if (filterCriteria.phone) {
             filtered = filtered.filter((employee) =>
                 employee.phone.toLowerCase() === filterCriteria.phone.toLowerCase()
@@ -126,6 +133,7 @@ function Employee() {
             );
         }
 
+        console.log(filtered)
         setFilteredEmployees(filtered);
     };
 
@@ -148,7 +156,7 @@ function Employee() {
     }
 
     return (
-        <div className="flex h-screen">
+        <div className="flex h-screen font-nunito font-semibold">
             <AdminLeftSidebar />
 
             <div
@@ -220,7 +228,7 @@ function Employee() {
                                     {columnsVisibility.id && <td className="p-4 text-sm text-gray-600">{employee.id}</td>}
                                     {columnsVisibility.username && <td className="p-4 text-sm text-gray-600">{employee.username}</td>}
                                     {columnsVisibility.name && <td className="p-4 text-sm text-gray-600">{employee.name}</td>}
-                                    {(columnsVisibility.email) && <td className="p-4 text-sm text-gray-600">{employee.email}</td>}
+                                    {(columnsVisibility.email) && <td className="p-4 text-sm text-gray-600">{employee.email}<div>{employee.workEmail}</div></td>}
                                     {columnsVisibility.phone && <td className="p-4 text-sm text-gray-600">{employee.phone}</td>}
                                     {columnsVisibility.gender && <td className="p-4 text-sm text-gray-600">{employee.gender}</td>}
                                     {columnsVisibility.department && <td className="p-4 text-sm text-gray-600">{employee.department}</td>}
@@ -255,10 +263,10 @@ function Employee() {
             >
                 <div className="p-4">
                     <div>
-                        <h2 className="text-xl font-semibold">Filter Out</h2>
+                        <h2 className="text-xl font-semibold font-nunito">Filter Out</h2>
                     </div>
 
-                    <div className="p-2 space-y-3">
+                    <div className="p-2 space-y-3 font-space">
                         <div className="flex space-x-2">
                             <label htmlFor="gender" className="text-xl">Gender:</label>
                             <select
@@ -304,15 +312,15 @@ function Employee() {
                             />
                         </div>
 
-                        {/*<div className="flex space-x-2">*/}
-                        {/*    <label htmlFor="workEmail" className="text-xl">Work Email:</label>*/}
-                        {/*    <input*/}
-                        {/*        name="workEmail"*/}
-                        {/*        value={filterCriteria.workEmail}*/}
-                        {/*        onChange={handleFilterChange}*/}
-                        {/*        className="text-black border-2 border-black rounded-md w-full"*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+                        <div className="flex space-x-2">
+                            <label htmlFor="workEmail" className="text-xl">Work Email:</label>
+                            <input
+                                name="workEmail"
+                                value={filterCriteria.workEmail}
+                                onChange={handleFilterChange}
+                                className="text-black border-2 border-black rounded-md w-full"
+                            />
+                        </div>
 
                         <div className="flex space-x-2">
                             <label htmlFor="phone" className="text-xl">Phone:</label>

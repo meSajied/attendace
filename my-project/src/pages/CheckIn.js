@@ -3,6 +3,8 @@ import { useParams, useLocation } from 'react-router-dom';
 import {axiosInstance} from "../axiosInstance";
 import {Loading} from "../components/Loading";
 import LoadingPage from "./LoadingPage";
+import {Header} from "../components/Header";
+import {AdminLeftSidebar} from "../components/AdminLeftSidebar";
 
 function CheckIn() {
     const { id } = useParams();
@@ -23,7 +25,6 @@ function CheckIn() {
                         date: date
                     }
                 });
-                console.log(response.data)
                 setCheckIns(response.data);
             } catch (err) {
                 setError('Failed to fetch check-ins.');
@@ -33,9 +34,7 @@ function CheckIn() {
         };
 
         fetchCheckIns();
-    }, []);
-
-    console.log(date)
+    }, [id, date]);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -51,22 +50,27 @@ function CheckIn() {
     }
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Check-ins for ID: {id}</h1>
-            <div className="space-y-4">
-                {checkIns.length === 0 ? (
-                    <p>No check-ins found for this ID.</p>
-                ) : (
-                    checkIns.map((checkIn, index) => (
-                        <div
-                            key={index}
-                            className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
-                        >
-                            <p className="text-lg font-semibold">{"Check " + checkIn.checks}</p>
-                            <p className="text-sm text-gray-500">Time: {formatDate(checkIn.time)}</p>
-                        </div>
-                    ))
-                )}
+        <div className="flex h-screen">
+            <AdminLeftSidebar />
+
+            <div className="flex-1 p-4">
+                <Header />
+                <h1 className="text-2xl font-bold mb-4">Check-ins for ID: {id}</h1>
+                <div className="space-y-4">
+                    {checkIns.length === 0 ? (
+                        <p>No check-ins found for this ID.</p>
+                    ) : (
+                        checkIns.map((checkIn, index) => (
+                            <div
+                                key={index}
+                                className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
+                            >
+                                <p className="text-lg font-semibold">{"Check " + checkIn.checks}</p>
+                                <p className="text-sm text-gray-500">Time: {formatDate(checkIn.time)}</p>
+                            </div>
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     );
