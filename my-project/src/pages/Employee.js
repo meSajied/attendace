@@ -20,7 +20,7 @@ function Employee() {
         username: "",
         name: "",
         email: "",
-        workEmail: "",
+        //workEmail: "",
         phone: "",
         joiningDate: "",
     });
@@ -85,45 +85,39 @@ function Employee() {
         }
         if (filterCriteria.department) {
             filtered = filtered.filter((employee) =>
-                employee.department.toLowerCase().includes(filterCriteria.department.toLowerCase())
+                employee.department.toLowerCase() === filterCriteria.department.toLowerCase()
             );
         }
         if (filterCriteria.designation) {
             filtered = filtered.filter((employee) =>
-                employee.designation.toLowerCase().includes(filterCriteria.designation.toLowerCase())
+                employee.designation.toLowerCase() === filterCriteria.designation.toLowerCase()
             );
         }
         if (filterCriteria.supervisor) {
             filtered = filtered.filter((employee) =>
-                employee.supervisor.toLowerCase().includes(filterCriteria.supervisor.toLowerCase())
+                employee.supervisor.toLowerCase() === filterCriteria.supervisor.toLowerCase()
             );
         }
         if (filterCriteria.username) {
             filtered = filtered.filter((employee) =>
-                employee.username.toLowerCase().includes(filterCriteria.username.toLowerCase())
+                employee.username.toLowerCase() === filterCriteria.username.toLowerCase()
             );
         }
         if (filterCriteria.name) {
             filtered = filtered.filter((employee) =>
-                employee.name.toLowerCase().includes(filterCriteria.name.toLowerCase())
+                employee.name.toLowerCase() === filterCriteria.name.toLowerCase()
             );
         }
 
         if (filterCriteria.email) {
             filtered = filtered.filter((employee) =>
-                employee.email.toLowerCase().includes(filterCriteria.email.toLowerCase())
-            );
-        }
-
-        if (filterCriteria.workEmail) {
-            filtered = filtered.filter((employee) =>
-                employee.workEmail.toLowerCase().includes(filterCriteria.workEmail.toLowerCase())
+                employee.email.toLowerCase() === filterCriteria.email.toLowerCase()
             );
         }
 
         if (filterCriteria.phone) {
             filtered = filtered.filter((employee) =>
-                employee.phone.toLowerCase().includes(filterCriteria.phone.toLowerCase())
+                employee.phone.toLowerCase() === filterCriteria.phone.toLowerCase()
             );
         }
         if (filterCriteria.joiningDate) {
@@ -226,7 +220,7 @@ function Employee() {
                                     {columnsVisibility.id && <td className="p-4 text-sm text-gray-600">{employee.id}</td>}
                                     {columnsVisibility.username && <td className="p-4 text-sm text-gray-600">{employee.username}</td>}
                                     {columnsVisibility.name && <td className="p-4 text-sm text-gray-600">{employee.name}</td>}
-                                    {(columnsVisibility.email || columnsVisibility.workEmail) && <td className="p-4 text-sm text-gray-600">{employee.email}<div>{employee.workEmail}</div></td>}
+                                    {(columnsVisibility.email) && <td className="p-4 text-sm text-gray-600">{employee.email}</td>}
                                     {columnsVisibility.phone && <td className="p-4 text-sm text-gray-600">{employee.phone}</td>}
                                     {columnsVisibility.gender && <td className="p-4 text-sm text-gray-600">{employee.gender}</td>}
                                     {columnsVisibility.department && <td className="p-4 text-sm text-gray-600">{employee.department}</td>}
@@ -310,15 +304,15 @@ function Employee() {
                             />
                         </div>
 
-                        <div className="flex space-x-2">
-                            <label htmlFor="workEmail" className="text-xl">Work Email:</label>
-                            <input
-                                name="workEmail"
-                                value={filterCriteria.workEmail}
-                                onChange={handleFilterChange}
-                                className="text-black border-2 border-black rounded-md w-full"
-                            />
-                        </div>
+                        {/*<div className="flex space-x-2">*/}
+                        {/*    <label htmlFor="workEmail" className="text-xl">Work Email:</label>*/}
+                        {/*    <input*/}
+                        {/*        name="workEmail"*/}
+                        {/*        value={filterCriteria.workEmail}*/}
+                        {/*        onChange={handleFilterChange}*/}
+                        {/*        className="text-black border-2 border-black rounded-md w-full"*/}
+                        {/*    />*/}
+                        {/*</div>*/}
 
                         <div className="flex space-x-2">
                             <label htmlFor="phone" className="text-xl">Phone:</label>

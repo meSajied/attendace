@@ -6,8 +6,6 @@ import com.monitor.repositories.EmployeeRepository;
 import com.monitor.repositories.WorkRecordRepository;
 import com.monitor.entity.*;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,39 +38,56 @@ public class EmployeeService {
   }
 
   public Optional<Employee> getEmployeeOfUsernameAndPassword(String username, String password) {
-    return employeeRepository.findByUsernameAndPassword(username, password);
+    Optional<Employee> employeeOptional = employeeRepository.findByUsernameAndPassword(username, password);
+
+    if (employeeOptional.isPresent()) {
+      Employee employee = employeeOptional.get();
+      employee.setWorkRecord(null);
+      employee.setCheckInRecord(null);
+      return Optional.of(employee);
+    }
+    return Optional.empty();
   }
 
   public Optional<Employee> getEmployee(String username) {
     return employeeRepository.findByUsername(username);
   }
 
-  public List<WorkRecord> getWorkRecords() {
-    return workRecordRepository.findAllWithEmployeeData();
+  public Optional<Employee> getWorkRecords(Long id) {
+    Optional<Employee> employeeOptional = employeeRepository.findById(id);
+
+    if (employeeOptional.isPresent()) {
+      Employee employee = employeeOptional.get();
+      employee.setCheckInRecord(null);
+      return Optional.of(employee);
+    }
+    return Optional.empty();
   }
 
-  public List<WorkRecord> getWorkRecordsThisWeek() {
+  public List<WorkRecord> getWorkRecordsThisWeek(Long id) {
     LocalDate today = LocalDate.now();
     LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY));
     LocalDate endOfWeek = startOfWeek.plusDays(6);
 
-    return workRecordRepository.findByDateBetween(startOfWeek, endOfWeek);
+    return workRecordRepository.findByEmployeeIdAndDateBetween(id, startOfWeek, endOfWeek);
   }
 
-  public List<WorkRecord> getWorkRecordsThisMonth() {
-    LocalDate today = LocalDate.now();
-    LocalDate startOfMonth = today.with(TemporalAdjusters.firstDayOfMonth());
-    LocalDate endOfMonth = today.with(TemporalAdjusters.lastDayOfMonth());
+  public Optional<Employee> getWorkRecordsOfMonth(Long id, LocalDate date) {
+    LocalDate startOfMonth = date.with(TemporalAdjusters.firstDayOfMonth());
+    LocalDate endOfMonth = date.with(TemporalAdjusters.lastDayOfMonth());
 
-    return workRecordRepository.findByDateBetween(startOfMonth, endOfMonth);
+    Optional<Employee> employeeOptional = employeeRepository.findEmployeeWithWorkRecordsInDateRange(id, startOfMonth, endOfMonth);
+
+    if (employeeOptional.isPresent()) {
+      Employee employee = employeeOptional.get();
+      employee.setCheckInRecord(null);
+      return Optional.of(employee);
+    }
+    return Optional.empty();
   }
 
-  public List<WorkRecord> getWorkRecordsToday() {
+  public List<WorkRecord> getWorkRecordsToday(Long id) {
     return workRecordRepository.findByDate(LocalDate.now());
-  }
-
-  public List<CheckInRecord> checkInRecordsOfEmployee(Long id) {
-    return checksInRepository.findByEmployeeId(id);
   }
 
   public Optional<Employee> updateEmployee(Employee updatedEmployee) {
@@ -155,6 +170,11 @@ public class EmployeeService {
           }
         }
       }
+  }
+
+  public List<CheckInRecord> getCheckInRecordByIdOfDate(Long id, LocalDate date) {
+    return checksInRepository.findByEmployeeIdAndDate(id, date);
+
   }
 
   public Employee createEmployee(Employee employee) {

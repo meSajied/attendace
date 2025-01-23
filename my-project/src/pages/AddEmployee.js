@@ -51,7 +51,7 @@ function AddEmployee() {
                 <div>
                     <Header />
                 </div>
-                <div className="max-w-sm mx-auto p-4">
+                <div className="space-y-3 p-4 sm:p-2">
                     <h2 className="text-xl font-bold text-center mb-4">Add a Employee</h2>
 
                     <form onSubmit={handleSubmit} className="space-y-3">

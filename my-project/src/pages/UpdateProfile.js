@@ -141,7 +141,7 @@ const UpdateProfile = () => {
 
                         <div className="flex justify-around items-center space-x-4 sm:space-x-8">
                             {isLoading ? (
-                                <button type="submit"
+                                <button
                                         className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">
                                     <Loading/></button>
                             ) : (

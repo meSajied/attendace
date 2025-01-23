@@ -1,5 +1,6 @@
 package com.monitor.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
@@ -13,10 +14,10 @@ public class CheckInRecord {
   private Long id;
 
   @ManyToOne
+  @JsonBackReference
   private Employee employee;
   @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
   private LocalDateTime time;
-
 
   @Enumerated(EnumType.STRING)
   private Checks checks;

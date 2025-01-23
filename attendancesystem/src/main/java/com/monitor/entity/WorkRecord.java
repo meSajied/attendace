@@ -1,5 +1,8 @@
 package com.monitor.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -12,8 +15,11 @@ public class WorkRecord {
   private Long id;
 
   @ManyToOne
+  @JsonBackReference
   private Employee employee;
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
   private LocalDateTime startTime;
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
   private LocalDateTime endTime;
   private long workTime;
   private long outTime;

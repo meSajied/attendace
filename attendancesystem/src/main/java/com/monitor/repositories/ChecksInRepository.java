@@ -13,8 +13,12 @@ import java.util.Optional;
 
 @Repository
 public interface ChecksInRepository extends CrudRepository<CheckInRecord, Long> {
-  List<CheckInRecord> findByEmployeeId(Long employeeId);
+  //List<CheckInRecord> findByEmployeeId(Long employeeId);
 
-  @Query("SELECT c FROM CheckInRecord c WHERE FUNCTION('DATE', c.time) = :today AND c.checks = :check AND c.employee.id = :employeeId ORDER BY c.time DESC LIMIT 1")
+  @Query("SELECT c FROM CheckInRecord c WHERE FUNCTION('DATE', c.time) = :date AND c.employee.id = :employeeId")
+  List<CheckInRecord> findByEmployeeIdAndDate(Long employeeId, LocalDate date);
+
+  @Query("SELECT c FROM CheckInRecord c WHERE FUNCTION('DATE', c.time) = :today AND c.checks = :check AND c.employee.id = :employeeId ORDER BY c.time DESC")
   Optional<CheckInRecord> findLatestCheckForEmployeeAndToday(Checks check, LocalDate today, Long employeeId);
+
 }

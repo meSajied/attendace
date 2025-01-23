@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 public class EmployeeController {
   @Autowired
@@ -84,30 +84,30 @@ public class EmployeeController {
     return employeeService.updateEmployee(updatedEmployee);
   }
 
-  @GetMapping("/work-records")
-  public List<WorkRecord> getWorkRecords() {
-    return employeeService.getWorkRecords();
+  @GetMapping("/work-records/{id}")
+  public Optional<Employee> getWorkRecords(@PathVariable Long id) {
+    return employeeService.getWorkRecords(id);
   }
 
-  @GetMapping("/work-records/month")
-  public List<WorkRecord> getWorkRecordsOfMonth() {
-    return employeeService.getWorkRecordsThisMonth();
+  @GetMapping("/work-records/{id}/month")
+  public Optional<Employee> getWorkRecordsOfMonth(@PathVariable Long id, @RequestParam LocalDate date) {
+    return employeeService.getWorkRecordsOfMonth(id, date);
   }
 
-  @GetMapping("/work-records/today")
-  public List<WorkRecord> getWorkRecordsOfToday() {
-    return employeeService.getWorkRecordsToday();
+  @GetMapping("/work-records/{id}/today")
+  public List<WorkRecord> getWorkRecordsOfToday(@PathVariable Long id) {
+    return employeeService.getWorkRecordsToday(id);
   }
 
-  @GetMapping("/work-records/week")
-  public List<WorkRecord> getWorkRecordsOfWeek() {
-    return employeeService.getWorkRecordsThisWeek();
+  @GetMapping("/work-records/{id}/week")
+  public List<WorkRecord> getWorkRecordsOfWeek(@PathVariable Long id) {
+    return employeeService.getWorkRecordsThisWeek(id);
   }
 
-  @GetMapping("/check-ins/{employeeId}")
-  public List<CheckInRecord> checkIns(@PathVariable Long employeeId) {
-    return employeeService.checkInRecordsOfEmployee(employeeId);
-  }
+//  @GetMapping("/check-ins/{employeeId}")
+//  public List<CheckInRecord> checkIns(@PathVariable Long employeeId) {
+//    return employeeService.checkInRecordsOfEmployee(employeeId);
+//  }
 
   @PostMapping("/check-in")
   public CheckInRecord checkIn(@RequestBody RequestDTO request) {
@@ -133,6 +133,11 @@ public class EmployeeController {
     checkInRecord.setTime(request.getTime());
 
     return employeeService.createCheckInRecord(checkInRecord);
+  }
+
+  @GetMapping("/check-ins/{id}")
+  public List<CheckInRecord> getCheckIns(@PathVariable Long id, @RequestParam LocalDate date) {
+    return employeeService.getCheckInRecordByIdOfDate(id, date);
   }
 
 }

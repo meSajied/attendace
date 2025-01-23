@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import {axiosInstance} from "../axiosInstance";
+import {Loading} from "../components/Loading";
+import LoadingPage from "./LoadingPage";
 
 function CheckIn() {
     const { id } = useParams();
     const queryParams = new URLSearchParams(useLocation().search);
     const date = queryParams.get('date');
     const [checkIns, setCheckIns] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -40,8 +42,8 @@ function CheckIn() {
         return date.toLocaleString();
     };
 
-    if (loading) {
-        return <div className="text-center p-4">Loading...</div>;
+    if (isLoading) {
+        return <LoadingPage />
     }
 
     if (error) {
@@ -60,7 +62,7 @@ function CheckIn() {
                             key={index}
                             className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
                         >
-                            <p className="text-lg font-semibold">{"Check" + checkIn.checks}</p>
+                            <p className="text-lg font-semibold">{"Check " + checkIn.checks}</p>
                             <p className="text-sm text-gray-500">Time: {formatDate(checkIn.time)}</p>
                         </div>
                     ))

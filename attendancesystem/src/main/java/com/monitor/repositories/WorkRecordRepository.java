@@ -13,10 +13,10 @@ import java.util.Optional;
 public interface WorkRecordRepository extends JpaRepository<WorkRecord, Long> {
 
   List<WorkRecord> findByDate(LocalDate date);
-  //Optional<WorkRecord> findByDate(LocalDate date);
-  Optional<WorkRecord> findByEmployeeIdAndDate(Long employeeId, LocalDate date);
-  @Query("SELECT w FROM WorkRecord w JOIN FETCH w.employee")
-  List<WorkRecord> findAllWithEmployeeData();
 
-  List<WorkRecord> findByDateBetween(LocalDate start, LocalDate end);
+  Optional<WorkRecord> findByEmployeeIdAndDate(Long employeeId, LocalDate date);
+
+  List<WorkRecord> findByEmployeeId(Long employeeId);
+
+  List<WorkRecord> findByEmployeeIdAndDateBetween(Long employeeId, LocalDate start, LocalDate end);
 }

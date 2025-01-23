@@ -6,22 +6,31 @@ import { AdminLeftSidebar } from "../components/AdminLeftSidebar";
 import { Ztrios } from "../components/Ztrios";
 import { useAuth } from "../account/Authentication";
 import LoadingPage from "./LoadingPage";
+import {Loading} from "../components/Loading";
 
 function WorkRecord() {
     const { id } = useParams();
     const [userInfo, setUserInfo] = useState(null);
     const [records, setRecords] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [date, setDate] = useState({
+        month: "",
+        year: "",
+    });
     const { isAdminLoggedIn } = useAuth();
 
     useEffect(() => {
         fetchWorkRecords();
     }, []);
 
-    function fetchWorkRecords(url = `/work-records/${Number(id)}`) {
+    function fetchWorkRecords(url = `/work-records/${Number(id)}`, date) {
         setLoading(true);
-        axiosInstance.get(url)
+        axiosInstance.get(url, {
+            params: {
+                date: date
+            }
+        })
             .then((response) => {
                 const { name, email, workEmail, id, workRecord } = response.data;
                 setUserInfo({ name, email, workEmail, id });
@@ -58,19 +67,28 @@ function WorkRecord() {
         });
     }
 
-    function FetchThisWeek() {
-        fetchWorkRecords(`/work-records/${Number(id)}/week`);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setDate((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let formDate = new Date(`${date.year}-${date.month}-01`);
+        formDate = formDate.toISOString().slice(0, 10);
+
+        FetchThisMonth(formDate)
     }
 
-    function FetchThisMonth() {
-        fetchWorkRecords(`/work-records/${Number(id)}/month`);
+    function FetchThisMonth(formDate) {
+        fetchWorkRecords(`/work-records/${Number(id)}/month`, formDate);
     }
 
-    function FetchToday() {
-        fetchWorkRecords(`/work-records/${Number(id)}/today`);
-    }
-
-    if (loading) {
+    if (isLoading) {
         return <LoadingPage />;
     }
 
@@ -85,11 +103,12 @@ function WorkRecord() {
             <div className="w-[85%] p-3">
                 <Header />
 
-                <div className="flex flex-col items-center p-4 container mx-auto">
+                <div className="flex flex-col items-center space-y-3 p-4 container mx-auto">
                     <h1 className="text-2xl font-semibold text-center mb-4">Work Records of</h1>
 
                     {userInfo && (
-                        <div className="flex flex-col items-start font-chakra font-semibold border-2 rounded-md border-black p-3 mb-3">
+                        <div
+                            className="flex flex-col items-start font-chakra font-semibold border-2 rounded-md border-black p-3 mb-3">
                             <div>Id: {userInfo.id}</div>
                             <div>Name: {userInfo.name}</div>
                             <div>Email: {userInfo.email}</div>
@@ -97,17 +116,60 @@ function WorkRecord() {
                         </div>
                     )}
 
-                    <div className="flex justify-center space-x-3 text-xl p-3">
-                        <button className="rounded-md p-1 bg-black text-white" onClick={FetchThisWeek}>
-                            This Week
-                        </button>
-                        <button className="rounded-md p-1 bg-black text-white" onClick={FetchThisMonth}>
-                            This Month
-                        </button>
-                        <button className="rounded-md p-1 bg-black text-white" onClick={FetchToday}>
-                            Today
-                        </button>
-                    </div>
+                    {/*<div className="flex justify-center space-x-3 text-xl p-3">*/}
+                    {/*    <button className="rounded-md p-1 bg-black text-white" onClick={FetchThisWeek}>*/}
+                    {/*        This Week*/}
+                    {/*    </button>*/}
+                    {/*    <button className="rounded-md p-1 bg-black text-white" onClick={FetchThisMonth}>*/}
+                    {/*        This Month*/}
+                    {/*    </button>*/}
+                    {/*    <button className="rounded-md p-1 bg-black text-white" onClick={FetchToday}>*/}
+                    {/*        Today*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
+
+                    <form onSubmit={handleSubmit} className="flex justify-center space-x-3 items-center font-josefin pl-2 pr-2">
+                        <div>
+                            <label htmlFor="month" className="text-sm">Month</label>
+                            <select
+                                name="month"
+                                value={date.month}
+                                onChange={handleChange}
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                            >
+                                <option value="">Select Month</option>
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+
+                        <div className="flex flex-col space-x-2 items-center sm:items-start">
+                            <label htmlFor="year" className="text-sm">Year:</label>
+                            <input name="year" className="border rounded border-black p-2 text-center"
+                                   value={date.email} onChange={handleChange} />
+                        </div>
+
+                        <div className="flex space-x-4 sm:space-x-8 mt-5">
+                            {isLoading ? (
+                                <button
+                                    className="font-josefin text-center rounded-md bg-black text-white p-2">
+                                    <Loading/></button>
+                            ) : (
+                                <button type="submit"
+                                        className="font-josefin text-center rounded-md bg-black text-white p-2">Filter</button>
+                            )}
+                        </div>
+                    </form>
 
                     <div className="overflow-x-auto w-full">
                         <table className="min-w-full table-auto border-collapse border border-gray-300">
@@ -134,7 +196,8 @@ function WorkRecord() {
                                     <td className="border px-4 py-2">{record.startTime}</td>
                                     <td className="border px-4 py-2">{record.endTime}</td>
                                     <td className="border px-4 py-2">
-                                        <Link to={`/check-in/${Number(userInfo.id)}?date=${record.date}`} className="text-blue-500 hover:underline">
+                                        <Link to={`/check-in/${Number(userInfo.id)}?date=${record.date}`}
+                                              className="text-blue-500 hover:underline">
                                             View Check-Ins
                                         </Link>
                                     </td>

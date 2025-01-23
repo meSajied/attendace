@@ -1,6 +1,7 @@
 package com.monitor.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -24,8 +25,10 @@ public class Employee {
   private String name;
 
   @Email(message = "Not a valid email address")
-  @NotBlank(message = "Email cannot be null")
   private String email;
+
+  @Email(message = "Not a valid email address")
+  private String workEmail;
 
   private String phone;
 
@@ -37,11 +40,11 @@ public class Employee {
   private String supervisor;
   private LocalDate joiningDate;
 
-  @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-  @JsonIgnore
+  @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JsonManagedReference
   private List<CheckInRecord> checkInRecord;
-  @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JsonIgnore
+  @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JsonManagedReference
   private List<WorkRecord> workRecord;
 
   public Long getId() {
@@ -74,6 +77,14 @@ public class Employee {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public String getWorkEmail() {
+    return workEmail;
+  }
+
+  public void setWorkEmail(String workEmail) {
+    this.workEmail = workEmail;
   }
 
   public String getPhone() {
