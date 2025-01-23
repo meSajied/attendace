@@ -21,4 +21,7 @@ public interface ChecksInRepository extends CrudRepository<CheckInRecord, Long> 
   @Query("SELECT c FROM CheckInRecord c WHERE FUNCTION('DATE', c.time) = :today AND c.checks = :check AND c.employee.id = :employeeId ORDER BY c.time DESC")
   Optional<CheckInRecord> findLatestCheckForEmployeeAndToday(Checks check, LocalDate today, Long employeeId);
 
+  @Query("SELECT c FROM CheckInRecord c WHERE FUNCTION('DATE', c.time) = :today AND c.employee.id = :employeeId ORDER BY c.time DESC LIMIT 1")
+  Optional<CheckInRecord> findLastCheckForEmployeeAndToday(LocalDate today, Long employeeId);
+
 }

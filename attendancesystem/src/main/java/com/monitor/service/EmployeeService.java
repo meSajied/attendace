@@ -76,14 +76,9 @@ public class EmployeeService {
     LocalDate startOfMonth = date.with(TemporalAdjusters.firstDayOfMonth());
     LocalDate endOfMonth = date.with(TemporalAdjusters.lastDayOfMonth());
 
-    Optional<Employee> employeeOptional = employeeRepository.findEmployeeWithWorkRecordsInDateRange(id, startOfMonth, endOfMonth);
-
-    if (employeeOptional.isPresent()) {
-      Employee employee = employeeOptional.get();
-      employee.setCheckInRecord(null);
-      return Optional.of(employee);
-    }
-    return Optional.empty();
+    Employee employee = employeeRepository.findEmployeeWithWorkRecordsInDateRange(id, startOfMonth, endOfMonth).get();
+    employee.setCheckInRecord(null);
+    return Optional.of(employee);
   }
 
   public List<WorkRecord> getWorkRecordsToday(Long id) {
@@ -225,5 +220,9 @@ public class EmployeeService {
 
   public Optional<Employee> getEmployeeId(Long id) {
     return employeeRepository.findById(id);
+  }
+
+  public Optional<CheckInRecord> findLast(Long id) {
+    return checksInRepository.findLastCheckForEmployeeAndToday(LocalDate.now(), id);
   }
 }

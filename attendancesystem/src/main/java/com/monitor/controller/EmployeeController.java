@@ -140,4 +140,9 @@ public class EmployeeController {
     return employeeService.getCheckInRecordByIdOfDate(id, date);
   }
 
+  @GetMapping("/check-ins/{id}/last")
+  public Optional<CheckInRecord> getLastCheckIns(@PathVariable Long id) {
+    return employeeService.findLast(id);
+  }
+
 }

@@ -4,6 +4,7 @@ import { useAuth } from "./Authentication";
 import { axiosInstance } from "../axiosInstance";
 import { Ztrios } from "../components/Ztrios";
 import { Loading } from "../components/Loading";
+import LoadingPage from "../pages/LoadingPage";
 
 export function Dashboard() {
     const [activeTab, setActiveTab] = useState("HOME");
@@ -11,6 +12,7 @@ export function Dashboard() {
 
     const [checkState, setCheckState] = useState("CHECK IN");
     const [isLoading, setIsLoading] = useState(false);
+    const [isPageLoading, setPageLoading] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [currentDateTime, setCurrentDateTime] = useState({ date: "", day: "", time: "" });
 
@@ -25,6 +27,30 @@ export function Dashboard() {
 
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        const FetchLastCheckIn = async () => {
+            try {
+                setPageLoading(true);
+                let response = await axiosInstance.get(`/check-ins/${Number(user?.id)}/last`)
+                console.log(response.data);
+                if (response.data === null) {
+                    setCheckState("CHECK IN");
+                }
+
+                if (response.data?.checks) {
+                    setCheckState(response.data?.checks === "IN" ? "CHECK OUT" : "CHECK IN");
+                }
+            }catch (e) {
+                console.log(e)
+            }finally {
+                setPageLoading(false);
+            }
+
+        }
+
+        FetchLastCheckIn();
+    }, [])
 
     function getCurrentDateTime() {
         const now = new Date();
@@ -60,14 +86,14 @@ export function Dashboard() {
         try {
             console.log(form);
             setIsLoading(true);
-            const res = await axiosInstance.post("/check-in", form, {
+            const response = await axiosInstance.post("/check-in", form, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
 
-            if (res.status === 200) {
-                setCheckState((prev) => (prev === "CHECK IN" ? "CHECK OUT" : "CHECK IN"));
+            if (response.status === 200) {
+                setCheckState(response.data?.checks === "IN" ? "CHECK OUT" : "CHECK IN");
             }
         } catch (error) {
             console.error('Error checking in:', error);
@@ -75,6 +101,10 @@ export function Dashboard() {
             setIsLoading(false);
         }
     };
+
+    if (isPageLoading) {
+        return <LoadingPage />;
+    }
 
     return (
         <div>
