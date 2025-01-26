@@ -65,12 +65,12 @@ function AddEmployee() {
                             <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
                                 <label htmlFor="id" className="text-sm">ID:</label>
                                 <input name="id" className="border rounded border-black p-2 text-center w-full"
-                                       value={employeeData.id} onChange={handleChange}/>
+                                       required value={employeeData.id} onChange={handleChange}/>
                             </div>
                             <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
                                 <label htmlFor="username" className="text-sm">Username:</label>
                                 <input name="username" className="border rounded border-black p-2 text-center w-full"
-                                       value={employeeData.username} onChange={handleChange}/>
+                                       required value={employeeData.username} onChange={handleChange}/>
                             </div>
                             <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
                                 <label htmlFor="name" className="text-sm">Name:</label>
@@ -96,19 +96,19 @@ function AddEmployee() {
                             <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
                                 <label htmlFor="email" className="text-sm">Email:</label>
                                 <input name="email" className="border rounded border-black p-2 text-center w-full"
-                                       value={employeeData.email} onChange={handleChange}/>
+                                       required value={employeeData.email} onChange={handleChange}/>
                             </div>
 
                             <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
                                 <label htmlFor="workEmail" className="text-sm">Work Email:</label>
                                 <input name="workEmail" className="border rounded border-black p-2 text-center w-full"
-                                       value={employeeData.workEmail} onChange={handleChange}/>
+                                       required value={employeeData.workEmail} onChange={handleChange}/>
                             </div>
 
                             <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
                                 <label htmlFor="password" className="text-sm">Password:</label>
                                 <input name="password" type="password" className="border rounded border-black p-2 text-center w-full"
-                                       value={employeeData.password} onChange={handleChange}/>
+                                       required value={employeeData.password} onChange={handleChange}/>
                             </div>
 
                             <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">

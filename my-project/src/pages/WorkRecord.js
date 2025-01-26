@@ -89,6 +89,7 @@ function WorkRecord() {
            setDateInvalid(true);
         } else {
             formDate = formDate.toISOString().slice(0, 10);
+            setDateInvalid(false);
             FetchThisMonth(formDate)
         }
     }

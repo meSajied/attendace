@@ -69,7 +69,7 @@ public class EmployeeController {
   }
 
   @PostMapping("/employee")
-  public Employee addEmployee(@RequestBody Employee employee) {
+  public Employee addEmployee(@Valid @RequestBody Employee employee) {
 
     System.out.println(employee);
     return employeeService.createEmployee(employee);

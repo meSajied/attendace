@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,16 +19,21 @@ import java.util.List;
 @Entity
 public class Employee {
   @Id
+  @NotNull
   private Long id;
   @Column(unique = true)
+  @NotBlank
   private String username;
   private String name;
 
   @Email(message = "Not a valid email address")
   @Column(unique = true)
+  @NotBlank
   private String email;
 
   @Email(message = "Not a valid email address")
+  @Column(unique = true)
+  @NotBlank
   private String workEmail;
 
   private String phone;
