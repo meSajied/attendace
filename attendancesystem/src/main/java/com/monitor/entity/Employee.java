@@ -18,13 +18,13 @@ import java.util.List;
 @Entity
 public class Employee {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Column(unique = true)
   private String username;
   private String name;
 
   @Email(message = "Not a valid email address")
+  @Column(unique = true)
   private String email;
 
   @Email(message = "Not a valid email address")

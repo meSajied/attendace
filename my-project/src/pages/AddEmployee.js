@@ -7,9 +7,12 @@ import {Loading} from "../components/Loading";
 
 function AddEmployee() {
     const [employeeData, setEmployeeData] = useState({
+        id: '',
         username: '',
         name: '',
         email: '',
+        workEmail: '',
+        password: '',
         phone: '',
         gender: '',
         department: '',
@@ -22,9 +25,12 @@ function AddEmployee() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+
+        const parsedValue = (name === 'id') ? parseInt(value, 10) : value;
+
         setEmployeeData((prevData) => ({
             ...prevData,
-            [name]: value,
+            [name]: parsedValue
         }));
     };
 
@@ -57,6 +63,16 @@ function AddEmployee() {
                     <form onSubmit={handleSubmit} className="space-y-3">
                         <div className="flex flex-col items-center font-josefin space-y-3 px-4 sm:px-6">
                             <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
+                                <label htmlFor="id" className="text-sm">ID:</label>
+                                <input name="id" className="border rounded border-black p-2 text-center w-full"
+                                       value={employeeData.id} onChange={handleChange}/>
+                            </div>
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
+                                <label htmlFor="username" className="text-sm">Username:</label>
+                                <input name="username" className="border rounded border-black p-2 text-center w-full"
+                                       value={employeeData.username} onChange={handleChange}/>
+                            </div>
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center">
                                 <label htmlFor="name" className="text-sm">Name:</label>
                                 <input name="name" className="border rounded border-black p-2 text-center w-full"
                                        value={employeeData.name} onChange={handleChange}/>
@@ -81,6 +97,18 @@ function AddEmployee() {
                                 <label htmlFor="email" className="text-sm">Email:</label>
                                 <input name="email" className="border rounded border-black p-2 text-center w-full"
                                        value={employeeData.email} onChange={handleChange}/>
+                            </div>
+
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                                <label htmlFor="workEmail" className="text-sm">Work Email:</label>
+                                <input name="workEmail" className="border rounded border-black p-2 text-center w-full"
+                                       value={employeeData.workEmail} onChange={handleChange}/>
+                            </div>
+
+                            <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                                <label htmlFor="password" className="text-sm">Password:</label>
+                                <input name="password" type="password" className="border rounded border-black p-2 text-center w-full"
+                                       value={employeeData.password} onChange={handleChange}/>
                             </div>
 
                             <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">

@@ -13,6 +13,7 @@ const UpdateProfile = () => {
         username: '',
         name: '',
         email: '',
+        workEmail: '',
         phone: '',
         gender: '',
         department: '',
@@ -122,6 +123,12 @@ const UpdateProfile = () => {
                         </div>
 
                         <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="workEmail" className="text-sm">Work Email:</label>
+                            <input name="workEmail" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.workEmail} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
                             <label htmlFor="designation" className="text-sm">Designation:</label>
                             <input name="designation" className="border rounded border-black p-2 text-center w-full"
                                    value={formData.designation} onChange={handleChange}/>
@@ -142,7 +149,7 @@ const UpdateProfile = () => {
                         <div className="flex justify-around items-center space-x-4 sm:space-x-8">
                             {isLoading ? (
                                 <button
-                                        className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">
+                                    className="font-josefin text-end rounded-md bg-black text-white p-2 text-sm">
                                     <Loading/></button>
                             ) : (
                                 <button type="submit"
@@ -161,6 +168,7 @@ const UpdateProfile = () => {
                     <div className="font-josefin flex flex-col items-center justify-center space-y-2">
                         <div>Name: {formData.name}</div>
                         <div>Email: {formData.email}</div>
+                        <div>Work Email: {formData.workEmail}</div>
                         <div>Phone: {formData.phone}</div>
                         <div>Gender: {formData.gender}</div>
                         <div>Designation: {formData.designation}</div>

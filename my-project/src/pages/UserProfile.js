@@ -16,6 +16,7 @@ const UserProfile = () => {
         username: user.username,
         name: user.name || "N/A",
         email: user.email || "N/A",
+        workEmail: user.workEmail || "N/A",
         phone: user.phone || "N/A",
         gender: user.gender || "N/A",
         department: user.department || "N/A",
@@ -98,6 +99,12 @@ const UserProfile = () => {
                         </div>
 
                         <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
+                            <label htmlFor="workEmail" className="text-sm">Work Email:</label>
+                            <input name="workEmail" className="border rounded border-black p-2 text-center w-full"
+                                   value={formData.email} onChange={handleChange}/>
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/2 space-x-2 items-center sm:items-start">
                             <label htmlFor="designation" className="text-sm">Designation:</label>
                             <input name="designation" className="border rounded border-black p-2 text-center w-full"
                                    value={formData.designation} onChange={handleChange}/>
@@ -137,6 +144,7 @@ const UserProfile = () => {
                     <div className="font-josefin flex flex-col items-center justify-center space-y-2">
                         <div>Name: {formData.name}</div>
                         <div>Email: {formData.email}</div>
+                        <div>Work Email: {formData.workEmail}</div>
                         <div>Phone: {formData.phone}</div>
                         <div>Gender: {formData.gender}</div>
                         <div>Designation: {formData.designation}</div>

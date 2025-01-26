@@ -93,6 +93,7 @@ public class EmployeeService {
 
       existingEmployee.setName(updatedEmployee.getName());
       existingEmployee.setEmail(updatedEmployee.getEmail());
+      existingEmployee.setWorkEmail(updatedEmployee.getWorkEmail());
       existingEmployee.setPhone(updatedEmployee.getPhone());
       existingEmployee.setGender(updatedEmployee.getGender());
       existingEmployee.setDepartment(updatedEmployee.getDepartment());

@@ -94,21 +94,6 @@ public class EmployeeController {
     return employeeService.getWorkRecordsOfMonth(id, date);
   }
 
-  @GetMapping("/work-records/{id}/today")
-  public List<WorkRecord> getWorkRecordsOfToday(@PathVariable Long id) {
-    return employeeService.getWorkRecordsToday(id);
-  }
-
-  @GetMapping("/work-records/{id}/week")
-  public List<WorkRecord> getWorkRecordsOfWeek(@PathVariable Long id) {
-    return employeeService.getWorkRecordsThisWeek(id);
-  }
-
-//  @GetMapping("/check-ins/{employeeId}")
-//  public List<CheckInRecord> checkIns(@PathVariable Long employeeId) {
-//    return employeeService.checkInRecordsOfEmployee(employeeId);
-//  }
-
   @PostMapping("/check-in")
   public CheckInRecord checkIn(@RequestBody RequestDTO request) {
     System.out.println(request);
