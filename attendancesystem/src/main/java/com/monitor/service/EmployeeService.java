@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -64,25 +66,20 @@ public class EmployeeService {
     return Optional.empty();
   }
 
-  public List<WorkRecord> getWorkRecordsThisWeek(Long id) {
-    LocalDate today = LocalDate.now();
-    LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY));
-    LocalDate endOfWeek = startOfWeek.plusDays(6);
-
-    return workRecordRepository.findByEmployeeIdAndDateBetween(id, startOfWeek, endOfWeek);
-  }
 
   public Optional<Employee> getWorkRecordsOfMonth(Long id, LocalDate date) {
     LocalDate startOfMonth = date.with(TemporalAdjusters.firstDayOfMonth());
     LocalDate endOfMonth = date.with(TemporalAdjusters.lastDayOfMonth());
 
-    Employee employee = employeeRepository.findEmployeeWithWorkRecordsInDateRange(id, startOfMonth, endOfMonth).get();
-    employee.setCheckInRecord(null);
-    return Optional.of(employee);
-  }
+    Optional<Employee> employeeOptional = employeeRepository.findEmployeeWithWorkRecordsInDateRange(id, startOfMonth, endOfMonth);
 
-  public List<WorkRecord> getWorkRecordsToday(Long id) {
-    return workRecordRepository.findByDate(LocalDate.now());
+    if (employeeOptional.isPresent()) {
+      Employee employee = employeeOptional.get();
+      employee.setCheckInRecord(null);
+      System.out.println(Optional.of(employee));
+      return Optional.of(employee);
+    }
+    return Optional.empty();
   }
 
   public Optional<Employee> updateEmployee(Employee updatedEmployee) {
@@ -200,7 +197,7 @@ public class EmployeeService {
     return null;
   }
 
-  public void sendSMSTo(String phone) {
+  public void sendSMSTo(String phone) throws UnsupportedEncodingException {
     Random r = new Random();
     this.code = 1000 + r.nextInt(9000);
     System.out.println(this.code);
@@ -208,10 +205,13 @@ public class EmployeeService {
     Optional<Admin> a = adminRepository.findByPhone(phone);
 
     if(a.isPresent()) {
+      String message = "Your OTP is " + code;
+      String encodedMessage = URLEncoder.encode(message, "UTF-8");
+
       String url = UriComponentsBuilder.fromHttpUrl("https://api.sms.net.bd/sendsms")
           .queryParam("api_key", "bKIp7TPyAE9u0nc9bSP2hg4xGkjVOftNEK01V20j")
           .queryParam("to", phone)
-          .queryParam("msg", "Your OTP is "+ code)
+          .queryParam("msg", encodedMessage)
           .toUriString();
 
       RestTemplate restTemplate = new RestTemplate();

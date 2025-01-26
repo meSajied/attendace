@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,7 +37,7 @@ public class EmployeeController {
   }
 
   @GetMapping("/send-sms")
-  public void sendSMS( @RequestParam String phone) {
+  public void sendSMS( @RequestParam String phone) throws UnsupportedEncodingException {
     System.out.println(phone);
     employeeService.sendSMSTo(phone);
   }

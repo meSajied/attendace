@@ -14,6 +14,7 @@ function WorkRecord() {
     const [records, setRecords] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isDateInvalid, setDateInvalid] = useState(false);
     const [date, setDate] = useState({
         month: "",
         year: "",
@@ -32,21 +33,25 @@ function WorkRecord() {
             }
         })
             .then((response) => {
-                const { name, email, workEmail, id, workRecord } = response.data;
-                setUserInfo({ name, email, workEmail, id });
-                const formattedRecords = formatWorkTimeData(workRecord);
-                setRecords(formattedRecords);
-                setLoading(false);
+                if (response.data) {
+                    const { name, email, workEmail, id, workRecord } = response.data;
+                    setUserInfo({ name, email, workEmail, id });
+                    const formattedRecords = formatWorkTimeData(workRecord || []);
+                    setRecords(formattedRecords);
+                } else {
+                    setRecords([]);
+                }
             })
             .catch((err) => {
                 console.log(err);
                 setError(err);
+            }).finally(() => {
                 setLoading(false);
-            });
+        });
     }
 
     function formatWorkTimeData(data) {
-        return data.map((record) => {
+        return data && data.map((record) => {
             const workTime = record.workTime;
             let workHour = Math.floor(workTime / 60);
             let workMinute = workTime % 60;
@@ -79,9 +84,13 @@ function WorkRecord() {
         e.preventDefault();
 
         let formDate = new Date(`${date.year}-${date.month}-01`);
-        formDate = formDate.toISOString().slice(0, 10);
 
-        FetchThisMonth(formDate)
+        if (isNaN(formDate.getTime())) {
+           setDateInvalid(true);
+        } else {
+            formDate = formDate.toISOString().slice(0, 10);
+            FetchThisMonth(formDate)
+        }
     }
 
     function FetchThisMonth(formDate) {
@@ -107,28 +116,21 @@ function WorkRecord() {
                     <h1 className="text-2xl font-semibold text-center mb-4">Work Records of</h1>
 
                     {userInfo && (
-                        <div
-                            className="flex flex-col items-start font-chakra font-semibold border-2 rounded-md border-black p-3 mb-3">
-                            <div>Id: {userInfo.id}</div>
-                            <div>Name: {userInfo.name}</div>
-                            <div>Email: {userInfo.email}</div>
-                            <div>Work Email: {userInfo.workEmail}</div>
+                        <div>
+                            <div
+                                className="flex flex-col items-start font-chakra font-semibold border-2 rounded-md border-black p-3 mb-3">
+                                <div>Id: {userInfo.id}</div>
+                                <div>Name: {userInfo.name}</div>
+                                <div>Email: {userInfo.email}</div>
+                                <div>Work Email: {userInfo.workEmail}</div>
+                            </div>
+                            {isDateInvalid && <div className="flex justify-center font-nunito font-semibold text-red-700 text-2xl">Invalid Date</div>}
                         </div>
+
                     )}
 
-                    {/*<div className="flex justify-center space-x-3 text-xl p-3">*/}
-                    {/*    <button className="rounded-md p-1 bg-black text-white" onClick={FetchThisWeek}>*/}
-                    {/*        This Week*/}
-                    {/*    </button>*/}
-                    {/*    <button className="rounded-md p-1 bg-black text-white" onClick={FetchThisMonth}>*/}
-                    {/*        This Month*/}
-                    {/*    </button>*/}
-                    {/*    <button className="rounded-md p-1 bg-black text-white" onClick={FetchToday}>*/}
-                    {/*        Today*/}
-                    {/*    </button>*/}
-                    {/*</div>*/}
-
-                    <form onSubmit={handleSubmit} className="flex justify-center space-x-3 items-center font-josefin pl-2 pr-2">
+                    <form onSubmit={handleSubmit}
+                          className="flex justify-center space-x-3 items-center font-josefin pl-2 pr-2">
                         <div>
                             <label htmlFor="month" className="text-sm">Month</label>
                             <select
@@ -186,7 +188,7 @@ function WorkRecord() {
                             </tr>
                             </thead>
                             <tbody>
-                            {records.map((record) => (
+                            {records && records.map((record) => (
                                 <tr key={record.id} className="border-t">
                                     <td className="border px-4 py-2">{record.id}</td>
                                     <td className="border px-4 py-2">{record.date}</td>
