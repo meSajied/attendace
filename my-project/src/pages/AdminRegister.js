@@ -3,6 +3,7 @@ import {axiosInstance} from "../axiosInstance";
 import {useNavigate} from "react-router";
 import {Loading} from "../components/Loading";
 import {ADMIN_EMPLOYEE_LIST} from "../routes";
+import {AdminLoginHeader} from "../components/AdminLoginHeader";
 
 function AdminRegister() {
     const navigate = useNavigate();
@@ -41,6 +42,10 @@ function AdminRegister() {
     };
 
     return (
+        <div>
+        <div>
+            <AdminLoginHeader />
+        </div>
         <div className="min-h-screen flex justify-center items-center bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-semibold text-center mb-6">Admin Register</h2>
@@ -115,6 +120,7 @@ function AdminRegister() {
                     </button>
                 </form>
             </div>
+        </div>
         </div>
     );
 }

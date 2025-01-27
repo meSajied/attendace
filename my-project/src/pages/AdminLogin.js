@@ -5,6 +5,7 @@ import {axiosInstance} from "../axiosInstance";
 import {useAuth} from "../account/Authentication";
 import {Loading} from "../components/Loading";
 import {ADMIN_EMPLOYEE_LIST} from "../routes";
+import {AdminLoginHeader} from "../components/AdminLoginHeader";
 
 const AdminLogin = () => {
 
@@ -44,6 +45,10 @@ const AdminLogin = () => {
     }
 
     return (
+        <div>
+            <div>
+                <AdminLoginHeader />
+            </div>
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="w-full sm:w-96 p-6 bg-white shadow-lg rounded-lg">
                 <h2 className="text-2xl font-bold text-center mb-4">Admin Login</h2>
@@ -55,6 +60,7 @@ const AdminLogin = () => {
                             type="text"
                             id="phone"
                             value={phone}
+                            required
                             onChange={(e) => setPhone(e.target.value)}
                             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
@@ -74,6 +80,7 @@ const AdminLogin = () => {
                     </div>
                 </form>
             </div>
+        </div>
         </div>
     );
 };

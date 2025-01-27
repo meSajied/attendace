@@ -25,8 +25,6 @@ public class WorkRecord {
   private long outTime;
 
   private LocalDate date;
-  @Enumerated(EnumType.STRING)
-  private OfficeType officeType;
 
   public Long getId() {
     return id;
@@ -66,14 +64,6 @@ public class WorkRecord {
 
   public void setDate(LocalDate date) {
     this.date = date;
-  }
-
-  public OfficeType getOfficeType() {
-    return officeType;
-  }
-
-  public void setOfficeType(OfficeType officeType) {
-    this.officeType = officeType;
   }
 
   public LocalDateTime getStartTime() {

@@ -7,7 +7,7 @@ function Header() {
     const { isAdminLoggedIn } = useAuth();
     return (
         <div className="flex justify-between p-3">
-            <Link to={isAdminLoggedIn ? ADMIN_EMPLOYEE_LIST : USER_DASHBOARD} className="flex items-center space-x-3">
+            <Link to={isAdminLoggedIn ? ADMIN_EMPLOYEE_LIST : USER_DASHBOARD} className="flex items-center space-x-3 font-nunito">
                 <Ztrios />
             </Link>
             <div>

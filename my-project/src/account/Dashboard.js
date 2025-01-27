@@ -7,7 +7,6 @@ import { Loading } from "../components/Loading";
 import LoadingPage from "../pages/LoadingPage";
 
 export function Dashboard() {
-    const [activeTab, setActiveTab] = useState("HOME");
     const { user } = useAuth();
 
     const [checkState, setCheckState] = useState("CHECK IN");
@@ -78,7 +77,6 @@ export function Dashboard() {
     const toggleCheckState = async () => {
         const form = {
             time: new Date().toISOString(),
-            officeType: activeTab,
             username: user.username,
             check: checkState.split(" ").slice(1).at(0),
         };
@@ -147,30 +145,8 @@ export function Dashboard() {
             <div className="h-screen flex flex-col items-center justify-center space-y-3 bg-gray-100 p-4">
 
                 <div className="w-full max-w-sm bg-white rounded-lg shadow-lg">
-                    <div className="flex border-b font-chakra">
-
-                        <button
-                            className={`flex-1 py-2 text-center ${activeTab === "HOME" ? "bg-red-400 text-white" : "bg-gray-200 text-gray-800"}`}
-                            onClick={() => setActiveTab("HOME")}
-                        >
-                            Home
-                        </button>
-                        <button
-                            className={`flex-1 py-2 text-center ${activeTab === "WORKPLACE" ? "bg-red-600 text-white" : "bg-gray-200 text-gray-800"}`}
-                            onClick={() => setActiveTab("WORKPLACE")}
-                        >
-                            Office
-                        </button>
-                    </div>
-
                     <div className="flex text-left w-full p-2 pl-5 pr-5">
                         <p className="font-josefin text-xl">Hello, {user?.name}</p>
-                    </div>
-
-                    <div className="p-4">
-                        <h2 className="text-xl font-semibold mb-4 font-josefin">
-                            Current Tab: {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-                        </h2>
                     </div>
 
                     <div className="p-4 text-center">

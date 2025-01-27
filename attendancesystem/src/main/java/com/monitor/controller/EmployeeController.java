@@ -109,7 +109,6 @@ public class EmployeeController {
       wrget.setWorkTime(0);
       wrget.setOutTime(0);
       wrget.setStartTime(LocalDateTime.now());
-      wrget.setOfficeType(request.getOfficeType());
       workRecordRepository.save(wrget);
     }
 

@@ -36,7 +36,7 @@ function WorkRecord() {
                 if (response.data) {
                     const { name, email, workEmail, id, workRecord } = response.data;
                     setUserInfo({ name, email, workEmail, id });
-                    const formattedRecords = formatWorkTimeData(workRecord || []);
+                    const formattedRecords = formatWorkTimeData(workRecord);
                     setRecords(formattedRecords);
                 } else {
                     setRecords([]);
@@ -63,10 +63,10 @@ function WorkRecord() {
             record.outTime = `${outHour} hour(s) and ${outMinute} minute(s)`;
 
             let startdate = new Date(record.startTime);
-            record.startTime = startdate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            record.startTimeFormatted = startdate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase();
 
             let endtdate = new Date(record.endTime);
-            record.endTime = endtdate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            record.endTimeFormatted = endtdate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase();
 
             return record;
         });
@@ -110,7 +110,7 @@ function WorkRecord() {
         <div className="flex h-screen">
             {isAdminLoggedIn ? <AdminLeftSidebar /> : null}
 
-            <div className="w-[85%] p-3">
+            <div className="w-[85%] p-3 w-full">
                 <Header />
 
                 <div className="flex flex-col items-center space-y-3 p-4 container mx-auto">
@@ -180,7 +180,6 @@ function WorkRecord() {
                             <tr className="bg-gray-200">
                                 <th className="border px-4 py-2">ID</th>
                                 <th className="border px-4 py-2">Date</th>
-                                <th className="border px-4 py-2">Office Type</th>
                                 <th className="border px-4 py-2">Out Time</th>
                                 <th className="border px-4 py-2">Work Time</th>
                                 <th className="border px-4 py-2">Start Time</th>
@@ -189,23 +188,34 @@ function WorkRecord() {
                             </tr>
                             </thead>
                             <tbody>
-                            {records && records.map((record) => (
-                                <tr key={record.id} className="border-t">
-                                    <td className="border px-4 py-2">{record.id}</td>
-                                    <td className="border px-4 py-2">{record.date}</td>
-                                    <td className="border px-4 py-2">{record.officeType}</td>
-                                    <td className="border px-4 py-2">{record.outTime}</td>
-                                    <td className="border px-4 py-2">{record.workTime}</td>
-                                    <td className="border px-4 py-2">{record.startTime}</td>
-                                    <td className="border px-4 py-2">{record.endTime}</td>
-                                    <td className="border px-4 py-2">
-                                        <Link to={`/check-in/${Number(userInfo.id)}?date=${record.date}`}
-                                              className="text-blue-500 hover:underline">
-                                            View Check-Ins
-                                        </Link>
-                                    </td>
-                                </tr>
-                            ))}
+                            {records && records.map((record) => {
+                                const startTime = new Date(record.startTime);
+
+                                const tenAM = new Date();
+                                tenAM.setHours(10, 0, 0, 0);
+
+                                let isAfterTenAM = startTime.getTime() > tenAM.getTime();
+
+
+                                return (
+                                    <tr key={record.id} className="border-t">
+                                        <td className="border px-4 py-2">{record.id}</td>
+                                        <td className="border px-4 py-2">{record.date}</td>
+                                        <td className="border px-4 py-2">{record.outTime}</td>
+                                        <td className="border px-4 py-2">{record.workTime}</td>
+                                        <td className={`border px-4 py-2 ${isAfterTenAM ? 'text-red-500' : ''}`}>
+                                            {record.startTimeFormatted}
+                                        </td>
+                                        <td className="border px-4 py-2">{record.endTimeFormatted}</td>
+                                        <td className="border px-4 py-2">
+                                            <Link to={`/check-in/${Number(userInfo.id)}?date=${record.date}`}
+                                                  className="text-blue-500 hover:underline">
+                                                View Check-Ins
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                             </tbody>
                         </table>
                     </div>
