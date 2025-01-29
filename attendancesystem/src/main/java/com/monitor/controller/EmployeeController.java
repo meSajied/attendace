@@ -42,6 +42,11 @@ public class EmployeeController {
     employeeService.sendSMSTo(phone);
   }
 
+  @GetMapping("whois")
+  public String whois() {
+    return "hello";
+  }
+
   @GetMapping("/admin/login")
   public Admin  loginAdmin( @RequestParam int code, @RequestParam String phone) {
     return employeeService.verifyAdminWithCode(code, phone);
