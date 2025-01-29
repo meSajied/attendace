@@ -30,10 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
           .password(employee.getPassword())
           .roles(employee.getRole().name())
           .build();
-
     }
 
     throw new UsernameNotFoundException("User not found with username: " + username);
-
   }
 }
