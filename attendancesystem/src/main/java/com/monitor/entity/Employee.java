@@ -41,6 +41,9 @@ public class Employee {
   @NotBlank(message = "Password cannot be null")
   private String password;
   private String gender;
+
+  @Enumerated(EnumType.STRING)
+  private Role role = Role.EMPLOYEE;
   private String department;
   private String designation;
   private String supervisor;
@@ -165,8 +168,16 @@ public class Employee {
     this.workRecord = workRecord;
   }
 
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
   @Override
   public String toString() {
-    return username + " " + name + " " + email + " " + phone + " " + password + " " + gender + " " + department + " " + designation + " " + supervisor + " " + joiningDate;
+    return username + " " + name + " " + email + " " + phone + " " + password + " " + gender + " " + department + " " + designation + " " + supervisor + " " + joiningDate + " " + checkInRecord + " " + workRecord + " " + role;
   }
 }

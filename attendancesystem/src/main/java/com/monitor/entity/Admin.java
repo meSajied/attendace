@@ -1,9 +1,6 @@
 package com.monitor.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Admin {
@@ -14,6 +11,8 @@ public class Admin {
   private String password;
   private String email;
   private String phone;
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
   public Long getId() {
     return id;
@@ -55,8 +54,16 @@ public class Admin {
     this.phone = phone;
   }
 
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
   @Override
   public String toString() {
-    return id + " " + name + " " + password + " " + email + " " + phone;
+    return id + " " + name + " " + password + " " + email + " " + phone + " " + role;
   }
 }
