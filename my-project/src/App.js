@@ -62,7 +62,7 @@ const ipReducer = (state, action) => {
 function App() {
     const [state, dispatch] = useReducer(ipReducer, initialState);
 
-    const allowedIp = '103.142.170.22';
+    const allowedIp = process.env.REACT_APP_IP;
 
     useEffect(() => {
         const fetchIp = async () => {
