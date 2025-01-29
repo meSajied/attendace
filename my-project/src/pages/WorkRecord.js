@@ -3,9 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { axiosInstance } from "../axiosInstance";
 import { Header } from "../components/Header";
 import { AdminLeftSidebar } from "../components/AdminLeftSidebar";
-import { Ztrios } from "../components/Ztrios";
 import { useAuth } from "../account/Authentication";
-import LoadingPage from "./LoadingPage";
+import {LoadingPage} from "./LoadingPage";
 import {Loading} from "../components/Loading";
 
 function WorkRecord() {

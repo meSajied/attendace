@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import {axiosInstance} from "../axiosInstance";
-import {Loading} from "../components/Loading";
-import LoadingPage from "./LoadingPage";
+import {LoadingPage} from "./LoadingPage";
 import {Header} from "../components/Header";
 import {AdminLeftSidebar} from "../components/AdminLeftSidebar";
 

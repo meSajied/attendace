@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from "../axiosInstance";
 import { Header } from "../components/Header";
 import { AdminLeftSidebar } from "../components/AdminLeftSidebar";
-import LoadingPage from "./LoadingPage";
-import login from "../account/Login";
+import {LoadingPage} from "./LoadingPage";
 
 function Employee() {
     const [employees, setEmployees] = useState([]);

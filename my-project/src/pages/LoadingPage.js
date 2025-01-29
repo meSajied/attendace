@@ -1,4 +1,3 @@
-// src/components/LoadingPage.js
 import React from 'react';
 
 const LoadingPage = () => {
@@ -12,4 +11,4 @@ const LoadingPage = () => {
     );
 };
 
-export default LoadingPage;
+export {LoadingPage};

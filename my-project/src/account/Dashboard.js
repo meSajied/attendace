@@ -4,7 +4,7 @@ import { useAuth } from "./Authentication";
 import { axiosInstance } from "../axiosInstance";
 import { Ztrios } from "../components/Ztrios";
 import { Loading } from "../components/Loading";
-import LoadingPage from "../pages/LoadingPage";
+import {LoadingPage} from "../pages/LoadingPage";
 
 export function Dashboard() {
     const { user } = useAuth();
