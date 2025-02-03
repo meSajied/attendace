@@ -8,6 +8,7 @@ import com.monitor.entity.Employee;
 import com.monitor.entity.WorkRecord;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = {"http://localhost:3000"})
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class EmployeeController {
   @Autowired
@@ -40,6 +41,11 @@ public class EmployeeController {
   public void sendSMS( @RequestParam String phone) throws UnsupportedEncodingException {
     System.out.println(phone);
     employeeService.sendSMSTo(phone);
+  }
+
+  @GetMapping("whois")
+  public String whois() {
+    return "hello";
   }
 
   @GetMapping("/admin/login")

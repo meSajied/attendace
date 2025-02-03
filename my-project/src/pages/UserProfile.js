@@ -8,14 +8,20 @@ const UserProfile = () => {
     const { user, login } = useAuth();
     const [isEditing, setEditing] = useState(false);
     const [isLoading, setLoading] = useState(false);
+    const credentials = user ? btoa(`${user.username}:${user.password}`) : '';
 
     const handleSubmit = async (updatedData) => {
         setLoading(true);
         try {
-            const response = await axiosInstance.put('/employee/update', updatedData);
+            const response = await axiosInstance.put('/employee/update', updatedData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${credentials}`
+                }
+            });
             if (response.status === 200) {
-                login(response.data); // Update auth state with the new data
-                setEditing(false); // Exit edit mode
+                login(response.data);
+                setEditing(false);
             }
         } catch (error) {
             console.error('Could not update user', error);

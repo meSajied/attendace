@@ -29,6 +29,7 @@ public class EmployeeService {
   private final ChecksInRepository checksInRepository;
   private final AdminRepository adminRepository;
   int code = 0;
+
   public EmployeeService(EmployeeRepository employeeRepository,
       WorkRecordRepository workRecordRepository,
       ChecksInRepository checksInRepository,

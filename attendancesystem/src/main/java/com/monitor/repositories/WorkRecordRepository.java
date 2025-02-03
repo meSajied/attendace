@@ -14,7 +14,7 @@ public interface WorkRecordRepository extends JpaRepository<WorkRecord, Long> {
 
   List<WorkRecord> findByDate(LocalDate date);
 
-  Optional<WorkRecord> findByEmployeeIdAndDate(Long employeeId, LocalDate date);
+  Optional<WorkRecord> findByEmployeeIdAndDate(long employeeId, LocalDate date);
 
   List<WorkRecord> findByEmployeeId(Long employeeId);
 

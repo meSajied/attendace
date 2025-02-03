@@ -4,6 +4,7 @@ import {axiosInstance} from "../axiosInstance";
 import {LoadingPage} from "./LoadingPage";
 import {Header} from "../components/Header";
 import {AdminLeftSidebar} from "../components/AdminLeftSidebar";
+import {useAuth} from "../account/Authentication";
 
 function CheckIn() {
     const { id } = useParams();
@@ -12,6 +13,8 @@ function CheckIn() {
     const [checkIns, setCheckIns] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const {user, admin} = useAuth();
+    const credentials = user? btoa(`${user.username}:${user.password}`) : admin? btoa(`${admin.username}:${admin.password}`) : '';
 
     useEffect(() => {
         const fetchCheckIns = async () => {
@@ -19,12 +22,14 @@ function CheckIn() {
                 const response = await axiosInstance.get(`/check-ins/${id}`, {
                     headers: {
                         "Content-Type": "application/json",
+                        "Authorization": "Basic "+ credentials
                     },
                     params: {
                         date: date
                     }
                 });
-                setCheckIns(response.data);
+                let data = response.data.reverse();
+                setCheckIns(data);
             } catch (err) {
                 setError('Failed to fetch check-ins.');
             } finally {
