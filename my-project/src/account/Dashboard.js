@@ -4,7 +4,7 @@ import { useAuth } from "./Authentication";
 import { axiosInstance } from "../axiosInstance";
 import { Ztrios } from "../components/Ztrios";
 import { Loading } from "../components/Loading";
-import {LoadingPage} from "../pages/LoadingPage";
+import { LoadingPage } from "../pages/LoadingPage";
 
 export function Dashboard() {
     const { user } = useAuth();
@@ -14,7 +14,7 @@ export function Dashboard() {
     const [isPageLoading, setPageLoading] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [currentDateTime, setCurrentDateTime] = useState({ date: "", day: "", time: "" });
-    const credentials = btoa(`${encodeURIComponent(user.username)}:${encodeURIComponent(user.password)}`);
+    const credentials = user ? btoa(`${user.username}:${user.password}`) : '';
 
     useEffect(() => {
         const checkTime = () => {
@@ -35,9 +35,9 @@ export function Dashboard() {
                 let response = await axiosInstance.get(`/check-ins/${Number(user?.id)}/last`, {
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Basic " + credentials
+                        "Authorization": `Basic ${credentials}`
                     }
-                })
+                });
                 console.log(response.data);
                 if (response.data === null) {
                     setCheckState("CHECK IN");
@@ -46,16 +46,17 @@ export function Dashboard() {
                 if (response.data?.checks) {
                     setCheckState(response.data?.checks === "IN" ? "CHECK OUT" : "CHECK IN");
                 }
-            }catch (e) {
-                console.log(e)
-            }finally {
+            } catch (e) {
+                console.log(e);
+            } finally {
                 setPageLoading(false);
             }
+        };
 
+        if (user) {
+            FetchLastCheckIn();
         }
-
-        FetchLastCheckIn();
-    }, [])
+    }, [user, credentials]);
 
     function getCurrentDateTime() {
         const now = new Date();
@@ -93,7 +94,7 @@ export function Dashboard() {
             const response = await axiosInstance.post("/check-in", form, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Basic " + credentials
+                    "Authorization": `Basic ${credentials}`
                 },
             });
 
@@ -172,7 +173,7 @@ export function Dashboard() {
                 ${isLoading ? "bg-red-500" : "bg-red-400 shadow-black shadow-md"}`}
                             >
                                 {isLoading ? (
-                                    <Loading/>
+                                    <Loading />
                                 ) : (
                                     <span className="text-xl font-space font-semibold">{checkState}</span>
                                 )}

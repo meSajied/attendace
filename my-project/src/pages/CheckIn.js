@@ -13,8 +13,8 @@ function CheckIn() {
     const [checkIns, setCheckIns] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const {user} = useAuth();
-    const credentials = btoa(`${user.username}:${user.password}`);
+    const {user, admin} = useAuth();
+    const credentials = user? btoa(`${user.username}:${user.password}`) : admin? btoa(`${admin.username}:${admin.password}`) : '';
 
     useEffect(() => {
         const fetchCheckIns = async () => {
@@ -28,7 +28,8 @@ function CheckIn() {
                         date: date
                     }
                 });
-                setCheckIns(response.data);
+                let data = response.data.reverse();
+                setCheckIns(data);
             } catch (err) {
                 setError('Failed to fetch check-ins.');
             } finally {

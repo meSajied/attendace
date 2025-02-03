@@ -4,8 +4,10 @@ import {axiosInstance} from "../axiosInstance";
 import {Header} from "../components/Header";
 import {AdminLeftSidebar} from "../components/AdminLeftSidebar";
 import {Loading} from "../components/Loading";
+import {useAuth} from "../account/Authentication";
 
 function AddEmployee() {
+    const {admin} = useAuth();
     const [employeeData, setEmployeeData] = useState({
         id: '',
         username: '',
@@ -22,6 +24,7 @@ function AddEmployee() {
     });
     const navigate = useNavigate();
     const [isLoading, setLoading] = useState(false);
+    const credentials = admin? btoa(`${admin.username}:${admin.password}`) : '';
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -38,8 +41,16 @@ function AddEmployee() {
         try {
             setLoading(true);
             console.log(employeeData)
-            await axiosInstance.post("/employee", employeeData);
-            navigate("/admin/employee");
+            let response = await axiosInstance.post("/employee", employeeData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${credentials}`
+                }
+            });
+
+            if (response.status === 200) {
+                navigate("/admin/employee");
+            }
         } catch (error) {
             console.error("Error updating profile", error);
             alert("Failed to update profile.");

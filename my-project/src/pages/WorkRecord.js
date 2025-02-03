@@ -18,7 +18,8 @@ function WorkRecord() {
         month: "",
         year: "",
     });
-    const { isAdminLoggedIn } = useAuth();
+    const { isAdminLoggedIn, user, admin } = useAuth();
+    const credentials = user? btoa(`${user.username}:${user.password}`) : admin? btoa(`${admin.username}:${admin.password}`) : '';
 
     useEffect(() => {
         fetchWorkRecords();
@@ -27,14 +28,20 @@ function WorkRecord() {
     function fetchWorkRecords(url = `/work-records/${Number(id)}`, date) {
         setLoading(true);
         axiosInstance.get(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${credentials}`,
+            },
             params: {
                 date: date
             }
         })
             .then((response) => {
                 if (response.data) {
-                    const { name, email, workEmail, id, workRecord } = response.data;
+                    console.log(response.data);
+                    let { name, email, workEmail, id, workRecord } = response.data;
                     setUserInfo({ name, email, workEmail, id });
+                    workRecord = [...workRecord].reverse();
                     const formattedRecords = formatWorkTimeData(workRecord);
                     setRecords(formattedRecords);
                 } else {

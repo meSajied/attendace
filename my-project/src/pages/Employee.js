@@ -4,8 +4,10 @@ import { axiosInstance } from "../axiosInstance";
 import { Header } from "../components/Header";
 import { AdminLeftSidebar } from "../components/AdminLeftSidebar";
 import {LoadingPage} from "./LoadingPage";
+import {useAuth} from "../account/Authentication";
 
 function Employee() {
+    const {admin} = useAuth();
     const [employees, setEmployees] = useState([]);
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -40,10 +42,16 @@ function Employee() {
     });
 
     const [isColumnDropdownOpen, setIsColumnDropdownOpen] = useState(false);
+    const credentials = admin? btoa(`${admin.username}:${admin.password}`) : '';
 
     useEffect(() => {
         axiosInstance
-            .get("employee/get-all")
+            .get("employee/get-all", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${credentials}`,
+                }
+            })
             .then((response) => {
                 setEmployees(response.data);
                 console.log(response.data)

@@ -21,66 +21,72 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
   private final CustomUserDetailsService customUserDetailsService;
 
   public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
-
     this.customUserDetailsService = customUserDetailsService;
-  }
-
-  @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**")
-        .allowedOrigins("http://localhost:3000")
-        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        .allowedHeaders("*")
-        .allowCredentials(true);
   }
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf(c-> {
-      c.disable();
-    });
+    http.csrf(c -> c.disable());
 
-    //http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+    http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
+    // Configure request matchers for each endpoint
     http.authorizeHttpRequests(a -> {
-      a
-          .requestMatchers(HttpMethod.POST, "check-in").authenticated()
-          .requestMatchers("/whois").authenticated();
-    })
+          a
+              // Public endpoints
+              .requestMatchers(HttpMethod.GET, "/whois").permitAll()
+              .requestMatchers(HttpMethod.GET, "/admin/login").permitAll()
+              .requestMatchers(HttpMethod.POST, "/admin/register").permitAll()
+              .requestMatchers(HttpMethod.GET, "/send-sms").permitAll()
+              .requestMatchers(HttpMethod.POST, "/employee/login").permitAll()
+
+              // Protected endpoints
+              .requestMatchers(HttpMethod.GET, "/employee/username/{username}").authenticated()
+              .requestMatchers(HttpMethod.GET, "/employee/id/{id}").authenticated()
+              .requestMatchers(HttpMethod.GET, "/employee/get-all").hasRole("ADMIN")
+              .requestMatchers(HttpMethod.POST, "/employee").hasRole("ADMIN")
+              .requestMatchers(HttpMethod.DELETE, "/employee/{id}").hasRole("ADMIN")
+              .requestMatchers(HttpMethod.PUT, "/employee/update").hasAnyRole("ADMIN", "EMPLOYEE")
+
+              .requestMatchers(HttpMethod.GET, "/work-records/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+              .requestMatchers(HttpMethod.GET, "/work-records/{id}/month").hasAnyRole("ADMIN", "EMPLOYEE")
+
+              .requestMatchers(HttpMethod.POST, "/check-in").hasRole("EMPLOYEE")
+              .requestMatchers(HttpMethod.GET, "/check-ins/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+              .requestMatchers(HttpMethod.GET, "/check-ins/{id}/last").hasRole("EMPLOYEE");
+        })
         .userDetailsService(userDetailsService())
         .httpBasic(Customizer.withDefaults());
 
     return http.build();
   }
 
-//  @Bean
-//  CorsConfigurationSource corsConfigurationSource() {
-//    CorsConfiguration configuration = new CorsConfiguration();
-//    configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-//    configuration.setAllowedMethods(List.of("*"));
-//    configuration.setAllowedHeaders(List.of("*"));
-//    configuration.setAllowCredentials(true);
-//    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//    source.registerCorsConfiguration("/**", configuration);
-//    return source;
-//  }
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+    configuration.setAllowedMethods(Arrays.asList("*"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 
   @Bean
   public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
     return http.getSharedObject(AuthenticationManagerBuilder.class).build();
-
   }
 
   @Bean
   public UserDetailsService userDetailsService() {
-   return customUserDetailsService;
+    return customUserDetailsService;
   }
 
   @Bean

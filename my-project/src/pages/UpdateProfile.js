@@ -5,18 +5,26 @@ import { Ztrios } from '../components/Ztrios';
 import { USER_LOGOUT } from '../routes';
 import {ProfileForm} from "../components/ProfileForm";
 import {LoadingPage} from "./LoadingPage";
+import {useAuth} from "../account/Authentication";
 
 const UpdateProfile = () => {
+    const {admin} = useAuth()
     const [isLoading, setLoading] = useState(true);
     const [isEditing, setEditing] = useState(false);
     const { id } = useParams();
     const navigate = useNavigate();
     const [employeeData, setEmployeeData] = useState({});
+    const credentials = admin? btoa(`${admin.username}:${admin.password}`) : '';
 
     useEffect(() => {
         const fetchEmployeeData = async () => {
             try {
-                const response = await axiosInstance.get(`/employee/id/${Number(id)}`);
+                const response = await axiosInstance.get(`/employee/id/${Number(id)}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Basic ${credentials}`,
+                    }
+                });
                 setEmployeeData(response.data);
                 setLoading(false);
             } catch (error) {
