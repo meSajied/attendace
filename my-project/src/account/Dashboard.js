@@ -14,6 +14,7 @@ export function Dashboard() {
     const [isPageLoading, setPageLoading] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [currentDateTime, setCurrentDateTime] = useState({ date: "", day: "", time: "" });
+    const credentials = btoa(`${encodeURIComponent(user.username)}:${encodeURIComponent(user.password)}`);
 
     useEffect(() => {
         const checkTime = () => {
@@ -31,7 +32,12 @@ export function Dashboard() {
         const FetchLastCheckIn = async () => {
             try {
                 setPageLoading(true);
-                let response = await axiosInstance.get(`/check-ins/${Number(user?.id)}/last`)
+                let response = await axiosInstance.get(`/check-ins/${Number(user?.id)}/last`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + credentials
+                    }
+                })
                 console.log(response.data);
                 if (response.data === null) {
                     setCheckState("CHECK IN");
@@ -87,6 +93,7 @@ export function Dashboard() {
             const response = await axiosInstance.post("/check-in", form, {
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": "Basic " + credentials
                 },
             });
 
